@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后现代主义设计示例</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background: #ffff00;
+            color: #000;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .btn {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .input {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+            color: #ff69b4;
+            -webkit-text-stroke: 2px #000;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #00ffff;
+            font-weight: 900;
+            -webkit-text-stroke: 1px #000;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 6px solid #ff00ff;
+            letter-spacing: 0.05em;
+            color: #32cd32;
+            -webkit-text-stroke: 1px #000;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #ff69b4;
+            border: 6px solid #00ffff;
+            padding: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            color: #ffff00;
+            -webkit-text-stroke: 1px #000;
+        }
+
+        .card-content {
+            font-size: 1rem;
+            color: #000;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: 4px solid #ff00ff;
+            background: #00ffff;
+            color: #000;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .btn:hover {
+            background: #ff00ff;
+            color: #ffff00;
+            border-color: #00ffff;
+        }
+
+        .btn-secondary {
+            background: #ff69b4;
+            color: #000;
+            border-color: #32cd32;
+        }
+
+        .btn-secondary:hover {
+            background: #32cd32;
+            color: #ffff00;
+            border-color: #ff69b4;
+        }
+
+        .input {
+            width: 100%;
+            padding: 1rem;
+            border: 4px solid #ff00ff;
+            background: #ffff00;
+            color: #000;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #00ffff;
+            background: #ff69b4;
+        }
+
+        .input::placeholder {
+            color: #666;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            vertical-align: top;
+            border: 4px solid #000;
+        }
+
+        .color-label {
+            font-size: 0.75rem;
+            color: #000;
+            display: block;
+            margin-top: 0.5rem;
+            font-weight: 900;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #ff00ff;
+            -webkit-text-stroke: 2px #000;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #000;
+            margin-top: 0.5rem;
+            font-weight: 900;
+        }
+
+        .list-item {
+            padding: 1rem;
+            background: #32cd32;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            border: 4px solid #ff69b4;
+        }
+
+        .list-item-title {
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+            color: #ffff00;
+            -webkit-text-stroke: 1px #000;
+        }
+
+        .list-item-desc {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>后现代主义设计示例</h1>
+            <p class="subtitle">POSTMODERNISM DESIGN EXAMPLE</p>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">按钮</h2>
+            <div class="card">
+                <button class="btn">默认按钮</button>
+                <button class="btn btn-secondary">次要按钮</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">输入框</h2>
+            <div class="card">
+                <input type="text" class="input" placeholder="输入文本...">
+                <input type="email" class="input" placeholder="输入邮箱...">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">卡片</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3 class="card-title">卡片标题</h3>
+                    <p class="card-content">这是一个示例卡片，展示了后现代主义设计的排版和间距。</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">统计数据</h3>
+                    <div class="stat-value">1,234</div>
+                    <p class="stat-label">总访问量</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">色彩系统</h2>
+            <div class="card">
+                <div class="color-swatch" style="background: #ff69b4;">
+                    <span class="color-label">#ff69b4</span>
+                </div>
+                <div class="color-swatch" style="background: #32cd32;">
+                    <span class="color-label">#32cd32</span>
+                </div>
+                <div class="color-swatch" style="background: #00ffff;">
+                    <span class="color-label">#00ffff</span>
+                </div>
+                <div class="color-swatch" style="background: #ff00ff;">
+                    <span class="color-label">#ff00ff</span>
+                </div>
+                <div class="color-swatch" style="background: #ffff00;">
+                    <span class="color-label">#ffff00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">列表</h2>
+            <div class="card">
+                <div class="list-item">
+                    <div class="list-item-title">项目一</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目二</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目三</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

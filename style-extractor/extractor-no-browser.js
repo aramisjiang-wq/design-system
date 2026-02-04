@@ -1,0 +1,430 @@
+import * as cheerio from 'cheerio';
+import { URL } from 'url';
+
+export async function extractDesignSystem(url) {
+  try {
+    console.log('正在获取网页内容...');
+    
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    
+    console.log('正在分析样式...');
+    
+    const extractedData = {
+      metadata: {
+        url: url,
+        extractedAt: new Date().toISOString()
+      },
+      colors: extractColors($),
+      fonts: extractFonts($),
+      spacing: extractSpacing($),
+      components: extractComponents($)
+    };
+    
+    console.log('正在生成设计规范...');
+    const markdown = generateMarkdown(extractedData);
+    
+    return {
+      success: true,
+      markdown,
+      data: extractedData
+    };
+    
+  } catch (error) {
+    console.error('提取失败:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
+
+function extractColors($) {
+  const colors = new Set();
+  const colorMap = new Map();
+  
+  $('*').each((i, el) => {
+    const style = $(el).attr('style') || '';
+    
+    const colorRegex = /color:\s*([^;]+)/gi;
+    const bgRegex = /background(?:-color)?:\s*([^;]+)/gi;
+    const borderRegex = /border(?:-color)?:\s*([^;]+)/gi;
+    
+    let match;
+    while ((match = colorRegex.exec(style)) !== null) {
+      const color = normalizeColor(match[1].trim());
+      if (color) {
+        colors.add(color);
+        colorMap.set(color, (colorMap.get(color) || 0) + 1);
+      }
+    }
+    
+    colorRegex.lastIndex = 0;
+    while ((match = bgRegex.exec(style)) !== null) {
+      const color = normalizeColor(match[1].trim());
+      if (color && !color.startsWith('rgba(0, 0, 0, 0)')) {
+        colors.add(color);
+        colorMap.set(color, (colorMap.get(color) || 0) + 1);
+      }
+    }
+    
+    bgRegex.lastIndex = 0;
+    while ((match = borderRegex.exec(style)) !== null) {
+      const color = normalizeColor(match[1].trim());
+      if (color) {
+        colors.add(color);
+        colorMap.set(color, (colorMap.get(color) || 0) + 1);
+      }
+    }
+  });
+  
+  const sortedColors = Array.from(colorMap.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([color]) => color);
+  
+  return {
+    allColors: sortedColors,
+    primaryColor: sortedColors[0] || '#000000',
+    colorCount: sortedColors.length
+  };
+}
+
+function extractFonts($) {
+  const fonts = new Set();
+  const fontSizes = new Set();
+  const fontWeights = new Set();
+  
+  $('*').each((i, el) => {
+    const style = $(el).attr('style') || '';
+    
+    const fontRegex = /font-family:\s*([^;]+)/gi;
+    const sizeRegex = /font-size:\s*([^;]+)/gi;
+    const weightRegex = /font-weight:\s*([^;]+)/gi;
+    
+    let match;
+    while ((match = fontRegex.exec(style)) !== null) {
+      fonts.add(match[1].trim());
+    }
+    
+    while ((match = sizeRegex.exec(style)) !== null) {
+      fontSizes.add(match[1].trim());
+    }
+    
+    while ((match = weightRegex.exec(style)) !== null) {
+      fontWeights.add(match[1].trim());
+    }
+  });
+  
+  const fontArray = Array.from(fonts);
+  const sizeArray = Array.from(fontSizes).sort((a, b) => {
+    const aNum = parseFloat(a);
+    const bNum = parseFloat(b);
+    return aNum - bNum;
+  });
+  
+  return {
+    fontFamily: fontArray[0] || 'sans-serif',
+    allFonts: fontArray,
+    fontSizes: sizeArray,
+    fontWeights: Array.from(fontWeights)
+  };
+}
+
+function extractSpacing($) {
+  const spacings = new Set();
+  const paddings = new Set();
+  const margins = new Set();
+  
+  $('*').each((i, el) => {
+    const style = $(el).attr('style') || '';
+    
+    const paddingRegex = /padding(?:-[a-z]+)?:\s*([^;]+)/gi;
+    const marginRegex = /margin(?:-[a-z]+)?:\s*([^;]+)/gi;
+    
+    let match;
+    while ((match = paddingRegex.exec(style)) !== null) {
+      const value = match[1].trim();
+      if (value !== '0') {
+        paddings.add(value);
+        spacings.add(value);
+      }
+    }
+    
+    while ((match = marginRegex.exec(style)) !== null) {
+      const value = match[1].trim();
+      if (value !== '0') {
+        margins.add(value);
+        spacings.add(value);
+      }
+    }
+  });
+  
+  return {
+    allSpacings: Array.from(spacings),
+    paddings: Array.from(paddings),
+    margins: Array.from(margins)
+  };
+}
+
+function extractComponents($) {
+  const buttons = [];
+  const cards = [];
+  const inputs = [];
+  
+  $('button, [role="button"], .btn, .button').each((i, el) => {
+    const $el = $(el);
+    const style = $el.attr('style') || '';
+    
+    buttons.push({
+      tag: el.tagName.toLowerCase(),
+      text: $el.text().trim().substring(0, 50),
+      className: $el.attr('class') || '',
+      style: extractStyleProperties(style)
+    });
+  });
+  
+  $('.card, .Card, [class*="card"]').each((i, el) => {
+    const $el = $(el);
+    const style = $el.attr('style') || '';
+    
+    cards.push({
+      tag: el.tagName.toLowerCase(),
+      className: $el.attr('class') || '',
+      style: extractStyleProperties(style)
+    });
+  });
+  
+  $('input, textarea, select').each((i, el) => {
+    const $el = $(el);
+    const style = $el.attr('style') || '';
+    
+    inputs.push({
+      tag: el.tagName.toLowerCase(),
+      type: $el.attr('type') || 'text',
+      className: $el.attr('class') || '',
+      style: extractStyleProperties(style)
+    });
+  });
+  
+  return {
+    buttons: buttons.slice(0, 5),
+    cards: cards.slice(0, 5),
+    inputs: inputs.slice(0, 5)
+  };
+}
+
+function extractStyleProperties(styleStr) {
+  const properties = {};
+  const props = ['background-color', 'color', 'border', 'border-radius', 'padding', 'margin', 'font-size', 'font-weight'];
+  
+  props.forEach(prop => {
+    const regex = new RegExp(`${prop}:\\s*([^;]+)`, 'i');
+    const match = styleStr.match(regex);
+    if (match) {
+      properties[prop] = match[1].trim();
+    }
+  });
+  
+  return properties;
+}
+
+function normalizeColor(color) {
+  if (!color || color === 'transparent' || color === 'none') {
+    return null;
+  }
+  
+  color = color.trim();
+  
+  if (color.startsWith('rgb')) {
+    return color;
+  }
+  
+  if (color.startsWith('#')) {
+    return color;
+  }
+  
+  const namedColors = {
+    'black': '#000000',
+    'white': '#ffffff',
+    'red': '#ff0000',
+    'green': '#00ff00',
+    'blue': '#0000ff',
+    'yellow': '#ffff00',
+    'cyan': '#00ffff',
+    'magenta': '#ff00ff'
+  };
+  
+  return namedColors[color.toLowerCase()] || color;
+}
+
+function generateMarkdown(data) {
+  const { metadata, colors, fonts, spacing, components } = data;
+  
+  return `# 设计规范提取结果
+
+## 元数据
+
+- **网站URL**: ${metadata.url}
+- **提取时间**: ${metadata.extractedAt}
+- **版本**: 1.0.0
+
+---
+
+## 设计理念
+
+- **风格名称**：自动提取
+- **风格描述**：从网站自动提取的设计样式
+- **提取方式**：基于 HTML 内联样式分析
+
+---
+
+## 设计价值观
+
+- **数据驱动**：基于实际网站样式数据
+- **可复用性**：生成标准化的设计规范
+- **可定制性**：支持自定义和扩展
+- **标准化**：遵循设计规范标准
+
+---
+
+## 字体系统
+
+### 主字体
+\`\`\`
+字体：${fonts.fontFamily}
+\`\`\`
+
+### 字体使用规则
+
+#### 标题层级
+${fonts.fontSizes.map((size, i) => `- **H${i + 1}**：${size}`).join('\n')}
+
+#### 字重
+${fonts.fontWeights.map(weight => `- **${weight}**`).join('\n')}
+
+---
+
+## 颜色系统
+
+### 主色
+\`\`\`
+主色：${colors.primaryColor}
+\`\`\`
+
+### 检测到的颜色（按使用频率排序）
+${colors.allColors.slice(0, 10).map((color, i) => `- **颜色${i + 1}**：${color}`).join('\n')}
+
+### 功能色
+- **成功色**：#4a9（示例）
+- **警告色**：#c44（示例）
+- **错误色**：#c44（示例）
+- **信息色**：#4a9（示例）
+
+---
+
+## 间距系统
+
+### 间距值
+${spacing.allSpacings.slice(0, 10).map(s => `- **${s}**`).join('\n')}
+
+### 内边距
+${spacing.paddings.slice(0, 5).map(p => `- **${p}**`).join('\n')}
+
+### 外边距
+${spacing.margins.slice(0, 5).map(m => `- **${m}**`).join('\n')}
+
+---
+
+## 组件规范
+
+### 按钮
+${components.buttons.length > 0 ? components.buttons.map((btn, i) => `
+#### 按钮${i + 1}
+- 标签：${btn.tag}
+- 文本：${btn.text}
+- 类名：${btn.className}
+- 样式：
+${Object.entries(btn.style).map(([k, v]) => `  - ${k}: ${v}`).join('\n')}
+`).join('\n') : '未检测到按钮样式'}
+
+### 卡片
+${components.cards.length > 0 ? components.cards.map((card, i) => `
+#### 卡片${i + 1}
+- 标签：${card.tag}
+- 类名：${card.className}
+- 样式：
+${Object.entries(card.style).map(([k, v]) => `  - ${k}: ${v}`).join('\n')}
+`).join('\n') : '未检测到卡片样式'}
+
+### 输入框
+${components.inputs.length > 0 ? components.inputs.map((input, i) => `
+#### 输入框${i + 1}
+- 标签：${input.tag}
+- 类型：${input.type}
+- 类名：${input.className}
+- 样式：
+${Object.entries(input.style).map(([k, v]) => `  - ${k}: ${v}`).join('\n')}
+`).join('\n') : '未检测到输入框样式'}
+
+---
+
+## CSS 变量定义
+
+\`\`\`css
+:root {
+  --font-family: ${fonts.fontFamily};
+  --color-primary: ${colors.primaryColor};
+  ${colors.allColors.slice(0, 5).map((c, i) => `  --color-${i + 1}: ${c};`).join('\n')}
+}
+\`\`\`
+
+---
+
+## 可访问性要求
+
+### 色彩对比度
+- **状态**: 需要手动检查
+- **建议**: 确保文字与背景的对比度至少为 4.5:1
+
+### 字体大小
+- **状态**: 需要手动检查
+- **建议**: 正文文字大小不小于 14px
+
+### 键盘导航
+- **状态**: 需要手动检查
+- **建议**: 确保所有交互元素可通过 Tab 键访问
+
+### 屏幕阅读器
+- **状态**: 需要手动检查
+- **建议**: 为所有图片提供 alt 文本，使用语义化 HTML
+
+---
+
+## 注意事项
+
+本设计规范是从网站自动提取生成的，基于 HTML 内联样式分析。
+
+**限制**：
+- 仅分析内联样式（inline styles）
+- 不包含外部 CSS 文件和内部样式表
+- 不包含 JavaScript 动态生成的样式
+
+**建议**：
+1. 检查所有提取的样式是否准确
+2. 根据实际需求调整设计规范
+3. 补充缺失的设计元素
+4. 添加更多组件样式规范
+5. 完善可访问性要求
+6. 手动添加外部 CSS 文件中的样式
+`;
+}

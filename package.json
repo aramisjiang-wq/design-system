@@ -1,0 +1,17 @@
+{
+  "name": "design-systems",
+  "version": "1.0.0",
+  "description": "96个设计规范，涵盖从极简主义到赛博朋克的多种风格",
+  "scripts": {
+    "dev": "echo \"No dev server configured\"",
+    "build": "echo \"No build step required for static site\""
+  },
+  "keywords": [
+    "design-systems",
+    "ui-design",
+    "web-design"
+  ],
+  "author": "",
+  "license": "MIT",
+  "private": true
+}

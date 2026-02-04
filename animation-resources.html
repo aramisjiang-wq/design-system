@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub动画资源库</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5f;
+            --bg-card: #ffffff;
+            --bg-hover: #f0f0f0;
+            --text-primary: #0d0d0d;
+            --text-secondary: #666666;
+            --text-tertiary: #999999;
+            --border-primary: #e0e0e0;
+            --border-secondary: #d0d0d0;
+            --accent: #0d0d0d;
+            --accent-hover: #1a1a1a;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #1a1a1a;
+            --bg-hover: #252525;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --text-tertiary: #707070;
+            --border-primary: #333333;
+            --border-secondary: #404040;
+            --accent: #e8e8e8;
+            --accent-hover: #ffffff;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-primary);
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 24px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .filter-section {
+            margin-bottom: 40px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--border-primary);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-secondary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .repo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            margin-bottom: 32px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .repo-card:hover {
+            border-color: var(--border-secondary);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .repo-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .repo-info {
+            flex: 1;
+        }
+
+        .repo-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .repo-stars {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #ffd700;
+            font-size: 14px;
+        }
+
+        .repo-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .repo-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .repo-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .repo-btn:hover {
+            background: var(--bg-hover);
+            transform: translateY(-1px);
+        }
+
+        .repo-btn.primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .repo-btn.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .repo-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .repo-resources {
+            padding: 24px;
+            background: var(--bg-secondary);
+        }
+
+        .repo-resources-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .resource-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .resource-item:hover {
+            border-color: var(--border-secondary);
+            transform: translateY(-2px);
+        }
+
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .resource-info {
+            flex: 1;
+        }
+
+        .resource-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .resource-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
+        .resource-preview {
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-element {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+
+        .preview-element:hover {
+            transform: scale(1.1);
+            animation-play-state: paused;
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .resource-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .resource-btn:hover {
+            background: var(--bg-hover);
+            transform: translateY(-1px);
+        }
+
+        .resource-btn.primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .resource-btn.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.7; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slide {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(15px); }
+        }
+
+        @keyframes fade {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+            20%, 40%, 60%, 80% { transform: translateX(4px); }
+        }
+
+        @keyframes zoom {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(0deg); }
+            20% { transform: rotate(15deg); }
+            40% { transform: rotate(-10deg); }
+            60% { transform: rotate(5deg); }
+            80% { transform: rotate(-5deg); }
+        }
+
+        @keyframes flip {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        @keyframes elastic {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.25, 0.75); }
+            40% { transform: scale(0.75, 1.25); }
+            50% { transform: scale(1.15, 0.85); }
+            65% { transform: scale(0.95, 1.05); }
+            75% { transform: scale(1.05, 0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .stats-section {
+            margin-bottom: 40px;
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border-primary);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-secondary);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-primary);
+        }
+
+        .copy-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                gap: 8px;
+            }
+
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .repo-header {
+                flex-direction: column;
+            }
+
+            .repo-actions {
+                width: 100%;
+            }
+
+            .repo-btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <svg viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 1 11.21 3 7 7 0 0 0 0 14.79z"/>
+            <path d="M12 2a10 10 0 0 0 10 10 10 10 0 0 0 10-10 10 10 0 0 0-10-10z"/>
+        </svg>
+        <span id="themeText">暗黑</span>
+    </button>
+
+    <div class="copy-toast" id="copyToast">已复制到剪贴板</div>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l7-7 7-7"/>
+                </svg>
+                返回主页
+            </a>
+            <h1>GitHub动画资源库</h1>
+            <p class="subtitle">7个精选的GitHub动画资源仓库，涵盖JavaScript、React、Vue、CSS等各个领域</p>
+        </header>
+
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">GitHub仓库</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">300k+</div>
+                    <div class="stat-label">总Star数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">动画库</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">开源免费</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" onclick="filterResources('all')">全部</button>
+            <button class="filter-btn" onclick="filterResources('comprehensive')">综合资源</button>
+            <button class="filter-btn" onclick="filterResources('javascript')">JavaScript</button>
+            <button class="filter-btn" onclick="filterResources('react')">React</button>
+            <button class="filter-btn" onclick="filterResources('vue')">Vue</button>
+            <button class="filter-btn" onclick="filterResources('css')">CSS</button>
+            <button class="filter-btn" onclick="filterResources('web')">Web动画</button>
+            <button class="filter-btn" onclick="filterResources('ui')">UI动画</button>
+        </div>
+
+        <div id="resourcesContainer"></div>
+    </div>
+
+    <script>
+        const repositories = [
+            {
+                name: 'sindresorhus/awesome',
+                stars: '300k+',
+                description: '最著名的Awesome列表，包含所有技术方向的资源。可以找到各种awesome子项目，如awesome-javascript、awesome-react等。',
+                url: 'https://github.com/sindresorhus/awesome',
+                category: 'comprehensive',
+                tags: ['综合', '导航', '所有技术'],
+                prompt: `我需要找一个动画库。
+
+我的需求：
+- 项目类型：[React/Vue/原生JavaScript/其他]
+- 动画类型：[2D/3D/过渡/复杂动画/简单动画]
+- 性能要求：[轻量级/高性能/无所谓]
+- 特殊需求：[手势支持/物理效果/时间轴控制/拖拽/其他]
+
+请查看以下GitHub仓库，帮我推荐合适的动画库：
+https://github.com/sindresorhus/awesome
+
+请提供：
+1. 推荐的动画库名称（3-5个）
+2. 每个库的安装命令
+3. 每个库的简单使用示例
+4. 每个库的优缺点分析
+5. 适用场景对比`,
+                resources: [
+                    { name: 'awesome-javascript', desc: 'JavaScript资源大全，包含动画库、框架、工具等', animation: 'pulse' },
+                    { name: 'awesome-react', desc: 'React生态资源，包含React动画库', animation: 'bounce' },
+                    { name: 'awesome-vue', desc: 'Vue生态资源，包含Vue动画库', animation: 'rotate' },
+                    { name: 'awesome-python', desc: 'Python资源大全', animation: 'slide' },
+                    { name: 'awesome-go', desc: 'Go语言资源大全', animation: 'fade' },
+                    { name: 'awesome-rust', desc: 'Rust语言资源大全', animation: 'shake' }
+                ]
+            },
+            {
+                name: 'sergey-pimenov/awesome-web-animation',
+                stars: '-',
+                description: '专门针对Web动画的精选列表。包含TweenJS、Anime.js、GSAP、Velocity.js、Three.js、Lottie、Popmotion等动画库。',
+                url: 'https://github.com/sergey-pimenov/awesome-web-animation',
+                category: 'web',
+                tags: ['Web动画', 'JavaScript', 'CSS', '3D'],
+                prompt: `我需要找一个Web动画库。
+
+我的需求：
+- 动画类型：[2D/3D/过渡/复杂动画]
+- 技术栈：[JavaScript/CSS/WebGL]
+- 性能要求：[轻量级/高性能/无所谓]
+
+请查看 https://github.com/sergey-pimenov/awesome-web-animation 帮我推荐。
+
+请提供：
+1. 推荐的动画库（3-5个）
+2. 安装命令
+3. 使用示例
+4. 性能对比`,
+                resources: [
+                    { name: 'GSAP', desc: '老牌全能、复杂时间轴控制', animation: 'zoom' },
+                    { name: 'Anime.js', desc: '轻量级、易上手、API友好', animation: 'bounce' },
+                    { name: 'Velocity.js', desc: '速度与优雅结合', animation: 'slide' },
+                    { name: 'Three.js', desc: '3D图形渲染', animation: 'rotate' },
+                    { name: 'Lottie', desc: '动画简化、支持AE导出', animation: 'pulse' },
+                    { name: 'Popmotion', desc: '最佳灵活性、物理效果', animation: 'elastic' },
+                    { name: 'TweenJS', desc: 'CreateJS套件的一部分', animation: 'fade' },
+                    { name: 'Mo.js', desc: '声明式动画、粒子效果', animation: 'swing' }
+                ]
+            },
+            {
+                name: 'sorrycc/awesome-javascript',
+                stars: '30k+',
+                description: 'JavaScript资源大全。包含包管理器、加载器、测试框架、MVC框架、模板引擎、数据可视化等。',
+                url: 'https://github.com/sorrycc/awesome-javascript',
+                category: 'javascript',
+                tags: ['JavaScript', '动画库', '工具', '框架'],
+                prompt: `我需要找一个JavaScript动画库。
+
+我的需求：
+- 是否使用框架：[原生JavaScript/React/Vue/其他]
+- 动画类型：[2D动画/3D动画/数据可视化/粒子效果]
+- 复杂度：[简单过渡/复杂时间轴/物理效果]
+- 性能要求：[高性能/轻量级/无所谓]
+
+请查看 https://github.com/sorrycc/awesome-javascript 帮我推荐。
+
+请提供：
+1. 推荐的动画库（3-5个）
+2. 安装命令
+3. 基础使用示例
+4. 性能对比
+5. 适用场景`,
+                resources: [
+                    { name: 'GSAP', desc: 'GreenSock Animation Platform，老牌全能', animation: 'zoom' },
+                    { name: 'Anime.js', desc: '简单而强大，轻量级', animation: 'bounce' },
+                    { name: 'Velocity.js', desc: '速度与优雅结合', animation: 'slide' },
+                    { name: 'Three.js', desc: '引入3D世界', animation: 'rotate' },
+                    { name: 'Lottie', desc: '使动画变简单', animation: 'pulse' },
+                    { name: 'Popmotion', desc: '最佳的灵活性', animation: 'elastic' },
+                    { name: 'D3.js', desc: '数据驱动文档', animation: 'fade' },
+                    { name: 'Chart.js', desc: '轻量级图表库', animation: 'shake' },
+                    { name: 'ECharts', desc: '企业级图表', animation: 'swing' }
+                ]
+            },
+            {
+                name: 'enaqx/awesome-react',
+                stars: '40k+',
+                description: 'React生态资源。包含Framer Motion、React Spring、React Transition Group、React Awesome Button等React动画库。',
+                url: 'https://github.com/enaqx/awesome-react',
+                category: 'react',
+                tags: ['React', '动画库', '组件', '工具'],
+                prompt: `我需要为React项目找一个动画库。
+
+项目信息：
+- React版本：[React 16/17/18]
+- 动画需求：[组件过渡/手势动画/复杂时间轴/简单效果]
+- 包大小要求：[需要轻量级<10KB/中等大小/无所谓]
+- 是否需要：[拖拽支持/物理效果/手势识别]
+
+请查看 https://github.com/enaqx/awesome-react 帮我推荐。
+
+请提供：
+1. 最推荐的3个库
+2. 每个库的安装命令
+3. 每个库的核心API使用示例
+4. 适用场景对比
+5. 性能和包大小对比`,
+                resources: [
+                    { name: 'Framer Motion', desc: '声明式API、手势支持、最强大灵活', animation: 'elastic' },
+                    { name: 'React Spring', desc: '弹簧物理模型、声明式语法', animation: 'bounce' },
+                    { name: 'React Transition Group', desc: '组件入场/出场动画、依赖CSS类', animation: 'fade' },
+                    { name: 'React Awesome Button', desc: '3D UI按钮、60fps动画', animation: 'zoom' },
+                    { name: 'React Motion', desc: '声明式动画、物理效果', animation: 'pulse' },
+                    { name: 'Auto Animate', desc: '自动布局动画', animation: 'slide' },
+                    { name: 'Recharts', desc: 'React图表库', animation: 'rotate' },
+                    { name: 'React Three Fiber', desc: 'React 3D渲染', animation: 'swing' }
+                ]
+            },
+            {
+                name: 'vuejs/awesome-vue',
+                stars: '70k+',
+                description: 'Vue生态资源。包含Vue Transition、v-animate-css、Animate.css等Vue动画库和过渡效果。',
+                url: 'https://github.com/vuejs/awesome-vue',
+                category: 'vue',
+                tags: ['Vue', '动画库', '过渡', '组件'],
+                prompt: `我需要为Vue项目找一个动画库。
+
+项目信息：
+- Vue版本：[Vue 2/Vue 3]
+- 动画需求：[过渡效果/组件动画/复杂动画/简单效果]
+- 是否需要：[轻量级/功能丰富/配合CSS动画]
+
+请查看 https://github.com/vuejs/awesome-vue 帮我推荐。
+
+请提供：
+1. 最推荐的2-3个库
+2. 安装和使用方法
+3. 与Vue的集成方式
+4. 代码示例
+5. 性能对比`,
+                resources: [
+                    { name: 'Vue Transition', desc: '内置过渡系统、支持in-out/out-in模式', animation: 'fade' },
+                    { name: 'v-animate-css', desc: '轻量级Vue动画、适合移动端', animation: 'bounce' },
+                    { name: 'Animate.css', desc: '配合Vue使用、预设CSS3动画', animation: 'pulse' },
+                    { name: 'VueUse Motion', desc: 'VueUse动画模块', animation: 'slide' },
+                    { name: 'Vue Motion', desc: 'Vue 3动画库', animation: 'elastic' },
+                    { name: 'Vue2 Animate', desc: 'Vue 2动画库', animation: 'zoom' },
+                    { name: 'Vue3 Animate', desc: 'Vue 3动画库', animation: 'rotate' }
+                ]
+            },
+            {
+                name: 'awesome-css-group/awesome-css',
+                stars: '-',
+                description: 'CSS资源列表。包含Animate.css、Hover.css、Magic Animations、Bounce.js等CSS动画库。',
+                url: 'https://github.com/awesome-css-group/awesome-css',
+                category: 'css',
+                tags: ['CSS', '动画库', '悬停效果', '过渡'],
+                prompt: `我需要一个CSS动画库。
+
+项目信息：
+- 动画类型：[悬停效果/过渡动画/加载动画/关键帧动画]
+- 是否需要JavaScript：[纯CSS/可以配合JS]
+- 浏览器兼容性要求：[现代浏览器/需要兼容IE]
+
+请查看 https://github.com/awesome-css-group/awesome-css 帮我推荐。
+
+请提供：
+1. 推荐的CSS动画库（2-3个）
+2. 引入方式
+3. 使用示例（HTML和CSS）
+4. 自定义方法
+5. 浏览器兼容性`,
+                resources: [
+                    { name: 'Animate.css', desc: '预设CSS3动画、抖动/闪烁/弹跳/翻转/旋转/淡入淡出', animation: 'pulse' },
+                    { name: 'Hover.css', desc: '悬停效果库、CSS3 transitions和transform', animation: 'bounce' },
+                    { name: 'Magic Animations', desc: '魔法动画效果', animation: 'swing' },
+                    { name: 'Bounce.js', desc: '弹跳效果', animation: 'bounce' },
+                    { name: 'CSShake', desc: '让元素抖动', animation: 'shake' },
+                    { name: 'AnimatePlus', desc: '增强的CSS动画', animation: 'zoom' },
+                    { name: 'Motion One', desc: '轻量级CSS动画', animation: 'slide' }
+                ]
+            },
+            {
+                name: 'animatious/awesome-animation',
+                stars: '-',
+                description: 'UI动画库资源。包含预设的、易于集成的动画效果，如网页加载动画、按钮点击反馈、导航栏过渡等。',
+                url: 'https://github.com/animatious/awesome-animation',
+                category: 'ui',
+                tags: ['UI动画', '预设效果', '组件'],
+                prompt: `我需要UI动画库。
+
+项目信息：
+- 动画类型：[加载动画/按钮反馈/导航过渡/组件动画]
+- 是否需要：[预设效果/可自定义/纯CSS]
+- 框架：[React/Vue/原生]
+
+请查看 https://github.com/animatious/awesome-animation 帮我推荐。
+
+请提供：
+1. 推荐的UI动画库（2-3个）
+2. 安装命令
+3. 使用示例
+4. 自定义方法`,
+                resources: [
+                    { name: 'Loading.io', desc: '加载动画预设', animation: 'rotate' },
+                    { name: 'LottieFiles', desc: 'Lottie动画资源', animation: 'pulse' },
+                    { name: 'UI Motion', desc: 'UI动画组件', animation: 'slide' },
+                    { name: 'Motion Array', desc: '动画效果集合', animation: 'bounce' },
+                    { name: 'Animate Components', desc: '动画组件库', animation: 'fade' },
+                    { name: 'Motion UI', desc: 'UI动画框架', animation: 'elastic' }
+                ]
+            }
+        ];
+
+        function renderRepositories(filter = 'all') {
+            const container = document.getElementById('resourcesContainer');
+            container.innerHTML = '';
+
+            const filtered = filter === 'all' 
+                ? repositories 
+                : repositories.filter(r => r.category === filter);
+
+            filtered.forEach(repo => {
+                const card = document.createElement('div');
+                card.className = 'repo-card';
+
+                card.innerHTML = `
+                    <div class="repo-header">
+                        <div class="repo-info">
+                            <div class="repo-title">
+                                ${repo.name}
+                                <div class="repo-stars">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.12 17.27 22 9 15.09 8.26 12 2z"/>
+                                    </svg>
+                                    <span>${repo.stars}</span>
+                                </div>
+                            </div>
+                            <div class="repo-description">${repo.description}</div>
+                            <div class="repo-tags">
+                                ${repo.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="repo-actions">
+                            <button class="repo-btn primary" onclick="window.open('${repo.url}', '_blank')">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                    <polyline points="15 3 21 3 21 9"/>
+                                </svg>
+                                查看仓库
+                            </button>
+                            <button class="repo-btn" onclick="copyPrompt('${encodeURIComponent(repo.prompt)}')">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M8 5H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h2"/>
+                                    <path d="M16 1h-2a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2z"/>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                </svg>
+                                复制提示词
+                            </button>
+                            <button class="repo-btn" onclick="window.open('animation-resources-prompt.md', '_blank')">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                查看完整模板
+                            </button>
+                        </div>
+                    </div>
+                    <div class="repo-resources">
+                        <div class="repo-resources-title">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                            可用资源
+                        </div>
+                        <div class="resources-grid">
+                            ${repo.resources.map(res => `
+                                <div class="resource-item">
+                                    <div class="resource-header">
+                                        <div class="resource-info">
+                                            <div class="resource-name">${res.name}</div>
+                                            <div class="resource-desc">${res.desc}</div>
+                                        </div>
+                                    </div>
+                                    <div class="resource-preview" id="preview-${repo.name.replace(/\//g, '-')}-${res.name.replace(/\s+/g, '-')}">
+                                        <div class="preview-element" data-animation="${res.animation || 'none'}">${res.name.substring(0, 2).toUpperCase()}</div>
+                                    </div>
+                                    <div class="resource-actions">
+                                        <button class="resource-btn primary" onclick="copyResourcePrompt('${encodeURIComponent(generateResourcePrompt(repo, res))}')">
+                                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M8 5H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h2"/>
+                                                <path d="M16 1h-2a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2z"/>
+                                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                            </svg>
+                                            复制提示词
+                                        </button>
+                                        <button class="resource-btn" onclick="window.open('https://github.com/search?q=${encodeURIComponent(res.name)}', '_blank')">
+                                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="11" cy="11" r="8"/>
+                                                <path d="M21 21l-4.35-4.35"/>
+                                            </svg>
+                                            搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            initializeAnimations();
+            updateFilterButtons(filter);
+        }
+
+        function initializeAnimations() {
+            const previewElements = document.querySelectorAll('.preview-element');
+            previewElements.forEach(element => {
+                const animation = element.getAttribute('data-animation');
+                if (animation && animation !== 'none') {
+                    element.style.animation = `${animation} 2s ease-in-out infinite`;
+                }
+            });
+        }
+
+        function filterResources(category) {
+            renderRepositories(category);
+        }
+
+        function updateFilterButtons(activeCategory) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === getCategoryText(activeCategory)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function getCategoryText(category) {
+            const map = {
+                'all': '全部',
+                'comprehensive': '综合资源',
+                'javascript': 'JavaScript',
+                'react': 'React',
+                'vue': 'Vue',
+                'css': 'CSS',
+                'web': 'Web动画',
+                'ui': 'UI动画'
+            };
+            return map[category] || '全部';
+        }
+
+        function copyPrompt(prompt) {
+            const decodedPrompt = decodeURIComponent(prompt);
+            navigator.clipboard.writeText(decodedPrompt).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+
+        function generateResourcePrompt(repo, resource) {
+            return `我需要使用 ${resource.name} 这个动画库。
+
+资源信息：
+- 仓库名称：${repo.name}
+- 资源名称：${resource.name}
+- 资源描述：${resource.desc}
+- 仓库地址：${repo.url}
+
+请提供：
+1. ${resource.name} 的详细介绍和特点
+2. 安装命令（npm/yarn/cdn）
+3. 基础使用示例代码
+4. 常用API和配置选项
+5. 适用场景和最佳实践
+6. 与其他类似库的对比
+7. 性能优化建议`;
+        }
+
+        function copyResourcePrompt(prompt) {
+            const decodedPrompt = decodeURIComponent(prompt);
+            navigator.clipboard.writeText(decodedPrompt).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            document.getElementById('themeText').textContent = next === 'dark' ? '亮色' : '暗黑';
+        }
+
+        renderRepositories();
+    </script>
+</body>
+</html>

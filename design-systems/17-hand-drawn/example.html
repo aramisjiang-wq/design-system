@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手绘风格设计示例</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Patrick Hand', cursive;
+            background: #fdfefe;
+            color: #2c3e50;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .btn {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .input {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.02em;
+            color: #f39c12;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #f1948a;
+            font-weight: 400;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f4d03f;
+            letter-spacing: 0.02em;
+            color: #f39c12;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #fdfefe;
+            border: 2px solid #f4d03f;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 3px 3px 0 #f39c12;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+            color: #f39c12;
+        }
+
+        .card-content {
+            font-size: 1rem;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: 2px solid #f39c12;
+            background: #f4d03f;
+            color: #2c3e50;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 0.875rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+            border-radius: 25px;
+            box-shadow: 3px 3px 0 #f39c12;
+        }
+
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 #f39c12;
+        }
+
+        .btn-secondary {
+            background: #f1948a;
+            color: #fff;
+            border-color: #e74c3c;
+            box-shadow: 3px 3px 0 #e74c3c;
+        }
+
+        .btn-secondary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 #e74c3c;
+        }
+
+        .input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #f39c12;
+            background: #fdfefe;
+            color: #2c3e50;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 20px;
+            box-shadow: 2px 2px 0 #f4d03f;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #f1948a;
+            background: #fff;
+        }
+
+        .input::placeholder {
+            color: #bdc3c7;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            vertical-align: top;
+            border: 2px solid #f39c12;
+            border-radius: 15px;
+        }
+
+        .color-label {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            display: block;
+            margin-top: 0.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: #f39c12;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #7f8c8d;
+            margin-top: 0.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .list-item {
+            padding: 1rem;
+            background: #fdfefe;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            border: 2px solid #f4d03f;
+            border-radius: 20px;
+            box-shadow: 2px 2px 0 #f39c12;
+        }
+
+        .list-item-title {
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.02em;
+            color: #f39c12;
+        }
+
+        .list-item-desc {
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>手绘风格设计示例</h1>
+            <p class="subtitle">HAND-DRAWN DESIGN EXAMPLE</p>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">按钮</h2>
+            <div class="card">
+                <button class="btn">默认按钮</button>
+                <button class="btn btn-secondary">次要按钮</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">输入框</h2>
+            <div class="card">
+                <input type="text" class="input" placeholder="输入文本...">
+                <input type="email" class="input" placeholder="输入邮箱...">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">卡片</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3 class="card-title">卡片标题</h3>
+                    <p class="card-content">这是一个示例卡片，展示了手绘风格设计的排版和间距。</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">统计数据</h3>
+                    <div class="stat-value">1,234</div>
+                    <p class="stat-label">总访问量</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">色彩系统</h2>
+            <div class="card">
+                <div class="color-swatch" style="background: #f4d03f;">
+                    <span class="color-label">#f4d03f</span>
+                </div>
+                <div class="color-swatch" style="background: #f39c12;">
+                    <span class="color-label">#f39c12</span>
+                </div>
+                <div class="color-swatch" style="background: #f1948a;">
+                    <span class="color-label">#f1948a</span>
+                </div>
+                <div class="color-swatch" style="background: #5dade2;">
+                    <span class="color-label">#5dade2</span>
+                </div>
+                <div class="color-swatch" style="background: #58d68d;">
+                    <span class="color-label">#58d68d</span>
+                </div>
+                <div class="color-swatch" style="background: #fdfefe; border-color: #bdc3c7;">
+                    <span class="color-label">#fdfefe</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">列表</h2>
+            <div class="card">
+                <div class="list-item">
+                    <div class="list-item-title">项目一</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目二</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目三</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

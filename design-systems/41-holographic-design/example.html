@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全息设计示例</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --hologram-cyan: #00ffff;
+            --hologram-magenta: #ff00ff;
+            --hologram-blue: #0066ff;
+            --hologram-purple: #9900ff;
+            --hologram-white: #ffffff;
+
+            --gradient-hologram: linear-gradient(135deg, #00ffff 0%, #ff00ff 50%, #0066ff 100%);
+            --gradient-hologram-alt: linear-gradient(135deg, #9900ff 0%, #00ffff 100%);
+
+            --color-bg-main: #0a0a1a;
+            --color-bg-secondary: #1a1a2e;
+            --color-bg-card: rgba(26, 26, 46, 0.8);
+            --color-bg-hover: rgba(26, 26, 46, 0.9);
+
+            --color-text-main: #00ffff;
+            --color-text-secondary: #ffffff;
+            --color-text-disabled: #4a5568;
+
+            --color-border-main: #00ffff;
+            --color-border-secondary: #ff00ff;
+
+            --font-family: 'Orbitron', 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --spacing-3xl: 4rem;
+
+            --border-radius-sm: 0.5rem;
+            --border-radius-md: 1rem;
+            --border-radius-lg: 1.5rem;
+
+            --transition-duration: 300ms;
+            --transition-timing: ease-in-out;
+
+            --hologram-glow: 0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
+            --hologram-glow-hover: 0 0 30px rgba(0, 255, 255, 0.7), 0 0 60px rgba(0, 255, 255, 0.5);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--color-bg-main);
+            color: var(--color-text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .btn {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .input {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+
+        header {
+            text-align: center;
+            padding: var(--spacing-3xl) 0;
+            margin-bottom: var(--spacing-2xl);
+            background: var(--gradient-hologram);
+            color: white;
+            margin: calc(var(--spacing-lg) * -1);
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-3xl) var(--spacing-lg);
+            border: 2px solid var(--color-border-main);
+            box-shadow: var(--hologram-glow);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--color-border-main);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .grid {
+            display: grid;
+            gap: var(--spacing-lg);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .card {
+            background: var(--color-bg-card);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            border: 2px solid var(--color-border-main);
+            box-shadow: var(--hologram-glow);
+            transition: all var(--transition-duration) var(--transition-timing);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--hologram-glow-hover);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-text-main);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 255, 255, 0.2);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.75rem;
+            color: var(--color-text-main);
+            font-weight: 500;
+            border: 1px solid var(--color-border-main);
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--transition-duration) var(--transition-timing);
+            border: 2px solid var(--color-border-main);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-hologram);
+            color: white;
+            box-shadow: var(--hologram-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hologram-glow-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text-main);
+            border: 2px solid var(--color-border-main);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gradient-hologram);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .input {
+            background: rgba(26, 26, 46, 0.5);
+            color: var(--color-text-main);
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            border: 2px solid var(--color-border-secondary);
+            font-size: 1rem;
+            width: 100%;
+            transition: all var(--transition-duration) var(--transition-timing);
+            backdrop-filter: blur(10px);
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--color-border-main);
+            box-shadow: var(--hologram-glow);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-lg);
+        }
+
+        .stat-card {
+            background: var(--color-bg-card);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            text-align: center;
+            border: 2px solid var(--color-border-main);
+            box-shadow: var(--hologram-glow);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+            margin-bottom: var(--spacing-xs);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .progress-bar {
+            height: 0.5rem;
+            background: var(--color-bg-hover);
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+            margin-top: var(--spacing-sm);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-hologram-alt);
+            border-radius: var(--border-radius-sm);
+            transition: width var(--transition-duration) var(--transition-timing);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--spacing-md);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>全息设计</h1>
+        <p class="subtitle">Holographic Design System</p>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2 class="section-title">统计数据</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">2.4K</div>
+                    <div class="stat-label">活跃用户</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">89%</div>
+                    <div class="stat-label">满意度</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">项目数量</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.8</div>
+                    <div class="stat-label">平均评分</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">功能卡片</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">智能分析</div>
+                    <div class="card-description">基于AI的数据分析引擎，提供实时洞察和预测。</div>
+                    <div class="card-meta">
+                        <span class="tag">AI</span>
+                        <span class="tag">分析</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">实时监控</div>
+                    <div class="card-description">24/7系统监控，自动告警和故障恢复。</div>
+                    <div class="card-meta">
+                        <span class="tag">监控</span>
+                        <span class="tag">自动化</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">数据可视化</div>
+                    <div class="card-description">丰富的图表类型，支持自定义仪表板。</div>
+                    <div class="card-meta">
+                        <span class="tag">可视化</span>
+                        <span class="tag">图表</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">按钮样式</h2>
+            <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap; align-items: center;">
+                <button class="btn btn-primary">主要按钮</button>
+                <button class="btn btn-secondary">次要按钮</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">表单组件</h2>
+            <div class="card">
+                <div class="form-group">
+                    <label class="form-label">项目名称</label>
+                    <input type="text" class="input" placeholder="输入项目名称...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">项目描述</label>
+                    <input type="text" class="input" placeholder="输入项目描述...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">完成进度</label>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: var(--spacing-sm);">
+                    <button class="btn btn-primary">保存项目</button>
+                    <button class="btn btn-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

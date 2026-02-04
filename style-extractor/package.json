@@ -1,0 +1,27 @@
+{
+  "name": "style-extractor",
+  "version": "1.0.0",
+  "description": "从网站提取设计样式并生成设计规范文档",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "server": "node server.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "design-system",
+    "style-extractor",
+    "web-scraper"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "color": "^4.2.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "playwright": "^1.40.0",
+    "postcss": "^8.4.32"
+  }
+}

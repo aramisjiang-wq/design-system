@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>装饰艺术设计示例</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cinzel', serif;
+            background: #1a1a1a;
+            color: #f5f5dc;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .btn {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .input {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #d4af37;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 4px solid #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #d4af37;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 4px solid #d4af37;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #d4af37, #f5d76e, #d4af37);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #d4af37;
+        }
+
+        .card-content {
+            font-size: 1rem;
+            color: #f5f5dc;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: 2px solid #d4af37;
+            background: linear-gradient(135deg, #d4af37, #f5d76e);
+            color: #1a1a1a;
+            font-family: 'Cinzel', serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #f5d76e, #d4af37);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #d4af37;
+        }
+
+        .btn-secondary:hover {
+            background: #d4af37;
+            color: #1a1a1a;
+        }
+
+        .input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #d4af37;
+            background: #1a1a1a;
+            color: #f5f5dc;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #f5d76e;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .input::placeholder {
+            color: #666;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            vertical-align: top;
+            border: 2px solid #d4af37;
+        }
+
+        .color-label {
+            font-size: 0.75rem;
+            color: #d4af37;
+            display: block;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #f5f5dc;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .list-item {
+            padding: 1rem;
+            background: #1a1a1a;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            border: 2px solid #d4af37;
+        }
+
+        .list-item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #d4af37;
+        }
+
+        .list-item-desc {
+            color: #f5f5dc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>装饰艺术设计示例</h1>
+            <p class="subtitle">ART DECO DESIGN EXAMPLE</p>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">按钮</h2>
+            <div class="card">
+                <button class="btn">默认按钮</button>
+                <button class="btn btn-secondary">次要按钮</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">输入框</h2>
+            <div class="card">
+                <input type="text" class="input" placeholder="输入文本...">
+                <input type="email" class="input" placeholder="输入邮箱...">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">卡片</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3 class="card-title">卡片标题</h3>
+                    <p class="card-content">这是一个示例卡片，展示了装饰艺术设计的排版和间距。</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">统计数据</h3>
+                    <div class="stat-value">1,234</div>
+                    <p class="stat-label">总访问量</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">色彩系统</h2>
+            <div class="card">
+                <div class="color-swatch" style="background: #d4af37;">
+                    <span class="color-label">#d4af37</span>
+                </div>
+                <div class="color-swatch" style="background: #1a1a1a;">
+                    <span class="color-label">#1a1a1a</span>
+                </div>
+                <div class="color-swatch" style="background: #f5f5dc;">
+                    <span class="color-label">#f5f5dc</span>
+                </div>
+                <div class="color-swatch" style="background: #800020;">
+                    <span class="color-label">#800020</span>
+                </div>
+                <div class="color-swatch" style="background: #000080;">
+                    <span class="color-label">#000080</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">列表</h2>
+            <div class="card">
+                <div class="list-item">
+                    <div class="list-item-title">项目一</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目二</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目三</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

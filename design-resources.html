@@ -1,0 +1,2516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计规范资源库</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-card: #ffffff;
+            --bg-hover: #f0f0f0;
+            --text-primary: #0d0d0d;
+            --text-secondary: #666666;
+            --text-tertiary: #999999;
+            --border-primary: #e0e0e0;
+            --border-secondary: #d0d0d0;
+            --accent: #0d0d0d;
+            --accent-hover: #1a1a1a;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #1a1a1a;
+            --bg-hover: #252525;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --text-tertiary: #707070;
+            --border-primary: #333333;
+            --border-secondary: #404040;
+            --accent: #e8e8e8;
+            --accent-hover: #ffffff;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-primary);
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 24px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .filter-section {
+            margin-bottom: 40px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--border-primary);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-secondary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .resource-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            margin-bottom: 32px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            border-color: var(--border-secondary);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .resource-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .resource-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .resource-url {
+            color: var(--info);
+            font-size: 14px;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .resource-url:hover {
+            text-decoration: underline;
+        }
+
+        .resource-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .resource-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .meta-badge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .meta-badge.high {
+            background: var(--success);
+            color: white;
+        }
+
+        .meta-badge.medium {
+            background: var(--warning);
+            color: white;
+        }
+
+        .meta-badge.low {
+            background: var(--info);
+            color: white;
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .action-btn:hover {
+            background: var(--bg-hover);
+            transform: translateY(-1px);
+        }
+
+        .action-btn.primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .prompt-preview {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-primary);
+        }
+
+        .prompt-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prompt-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .stats-section {
+            margin-bottom: 40px;
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border-primary);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-secondary);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-primary);
+        }
+
+        .copy-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .filter-section {
+                gap: 8px;
+            }
+
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .resource-actions {
+                width: 100%;
+            }
+
+            .action-btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <svg viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 1 11.21 3 7 7 0 0 0 0 14.79z"/>
+            <path d="M12 2a10 10 0 0 0 10 10 10 10 0 0 0 10-10 10 10 0 0 0-10-10z"/>
+        </svg>
+        <span id="themeText">暗黑</span>
+    </button>
+
+    <div class="copy-toast" id="copyToast">已复制到剪贴板</div>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l7-7 7-7"/>
+                </svg>
+                返回主页
+            </a>
+            <h1>设计规范资源库</h1>
+            <p class="subtitle">精选的设计规范和创意资源网站，一键复制AI提示词</p>
+        </header>
+
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">82</div>
+                    <div class="stat-label">资源网站</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">资源分类</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">AI可用</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">一键</div>
+                    <div class="stat-label">复制提示词</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" onclick="filterResources('all')">全部</button>
+            <button class="filter-btn" onclick="filterResources('design-system')">设计系统</button>
+            <button class="filter-btn" onclick="filterResources('company')">大厂规范</button>
+            <button class="filter-btn" onclick="filterResources('inspiration')">创意灵感</button>
+            <button class="filter-btn" onclick="filterResources('pattern')">设计模式</button>
+            <button class="filter-btn" onclick="filterResources('color')">色彩排版</button>
+            <button class="filter-btn" onclick="filterResources('component')">组件图标</button>
+            <button class="filter-btn" onclick="filterResources('animation')">交互动画</button>
+            <button class="filter-btn" onclick="filterResources('learning')">学习教程</button>
+        </div>
+
+        <div id="resourcesContainer"></div>
+    </div>
+
+    <script>
+        const resources = [
+            {
+                name: 'Design Systems International',
+                url: 'https://designsystems.com',
+                description: '全球设计系统集合，收录了世界各地的优秀设计系统案例和最佳实践。',
+                category: 'design-system',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合设计系统最佳实践的[组件类型]。
+
+参考资源：Design Systems International (https://designsystems.com)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[现代/简洁/科技感等]
+- 功能需求：[具体功能列表]
+- 响应式：[需要/不需要]
+
+请提供：
+1. 完整的HTML结构
+2. CSS样式（包含设计系统变量）
+3. JavaScript交互代码
+4. 设计规范说明（间距、颜色、字体等）
+5. 可访问性建议`,
+                tags: ['设计系统', '最佳实践', '案例库']
+            },
+            {
+                name: 'Design Systems Repo',
+                url: 'https://designsystemsrepo.com',
+                description: '设计系统仓库，收集了各种规模公司的设计系统案例。',
+                category: 'design-system',
+                aiUsability: 'high',
+                prompt: `我需要参考设计系统仓库中的案例来创建[组件类型]。
+
+参考资源：Design Systems Repo (https://designsystemsrepo.com)
+
+我的需求：
+- 参考风格：[现代/企业级/初创公司等]
+- 组件类型：[具体组件]
+- 功能要求：[具体需求]
+- 技术栈：[React/Vue/原生等]
+
+请提供：
+1. 组件的完整实现代码
+2. 设计系统变量定义
+3. 组件使用示例
+4. 设计规范文档`,
+                tags: ['设计系统', '案例库', '企业级']
+            },
+            {
+                name: 'Google Material Design',
+                url: 'https://material.io/design',
+                description: '谷歌的材料设计系统，提供完整的设计规范、组件库和实现指南。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Google Material Design规范的[组件类型]。
+
+参考资源：Google Material Design (https://material.io/design)
+
+我的需求：
+- 组件类型：[按钮/卡片/表单/导航等]
+- Material Design版本：[Material 2/Material 3]
+- 颜色主题：[主色调/次色调]
+- 功能需求：[具体功能]
+
+请提供：
+1. 完整的HTML结构
+2. Material Design CSS样式
+3. Material Icons使用方法
+4. 波纹效果实现
+5. 响应式适配代码`,
+                tags: ['Google', 'Material Design', '设计系统']
+            },
+            {
+                name: 'Apple Human Interface Guidelines',
+                url: 'https://developer.apple.com/design/human-interface-guidelines',
+                description: '苹果的人机交互指南，提供iOS、macOS等平台的设计规范。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Apple HIG规范的[组件类型]。
+
+参考资源：Apple Human Interface Guidelines (https://developer.apple.com/design/human-interface-guidelines)
+
+我的需求：
+- 平台：[iOS/macOS/watchOS等]
+- 组件类型：[按钮/导航/表单等]
+- 设计风格：[简洁/优雅/现代]
+- 功能需求：[具体功能]
+
+请提供：
+1. 符合HIG的HTML结构
+2. SF Pro字体使用方法
+3. 颜色和间距规范
+4. 手势交互实现
+5. 动画效果代码`,
+                tags: ['Apple', 'HIG', 'iOS', 'macOS']
+            },
+            {
+                name: 'Microsoft Fluent Design',
+                url: 'https://www.microsoft.com/design/fluent',
+                description: '微软的流畅设计系统，强调光感、深度、动效、材质和缩放。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Microsoft Fluent Design规范的[组件类型]。
+
+参考资源：Microsoft Fluent Design (https://www.microsoft.com/design/fluent)
+
+我的需求：
+- 组件类型：[按钮/卡片/导航等]
+- Fluent特性：[光感/深度/动效/材质/缩放]
+- 颜色主题：[具体颜色]
+- 功能需求：[具体功能]
+
+请提供：
+1. Fluent Design HTML结构
+2. Segoe UI字体使用
+3. 光效和深度效果
+4. 动画和过渡代码
+5. 响应式实现`,
+                tags: ['Microsoft', 'Fluent Design', 'Windows']
+            },
+            {
+                name: 'IBM Carbon Design System',
+                url: 'https://carbondesignsystem.com',
+                description: 'IBM的碳设计系统，提供企业级的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合IBM Carbon Design规范的[组件类型]。
+
+参考资源：IBM Carbon Design System (https://carbondesignsystem.com)
+
+我的需求：
+- 组件类型：[按钮/表单/数据展示等]
+- 企业级需求：[可访问性/国际化等]
+- 颜色主题：[Carbon Blue/其他]
+- 功能需求：[具体功能]
+
+请提供：
+1. Carbon Design HTML结构
+2. IBM Plex字体使用
+3. 企业级设计规范
+4. 可访问性实现
+5. 组件使用示例`,
+                tags: ['IBM', 'Carbon Design', '企业级']
+            },
+            {
+                name: 'Atlassian Design System',
+                url: 'https://atlassian.design',
+                description: 'Atlassian的设计系统，提供统一的设计语言和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Atlassian Design System规范的[组件类型]。
+
+参考资源：Atlassian Design System (https://atlassian.design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航等]
+- 设计风格：[简洁/专业]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Atlassian Design HTML结构
+2. Charlie Sans字体使用
+3. 设计规范变量
+4. 组件实现代码
+5. 使用示例`,
+                tags: ['Atlassian', '设计系统', '企业级']
+            },
+            {
+                name: 'Shopify Polaris',
+                url: 'https://polaris.shopify.com',
+                description: 'Shopify的Polaris设计系统，专为电商应用设计。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Shopify Polaris规范的[组件类型]。
+
+参考资源：Shopify Polaris (https://polaris.shopify.com)
+
+我的需求：
+- 组件类型：[按钮/表单/卡片等]
+- 电商场景：[购物车/商品展示/结账等]
+- 设计风格：[简洁/现代]
+- 功能需求：[具体功能]
+
+请提供：
+1. Polaris HTML结构
+2. 字体和颜色规范
+3. 电商组件实现
+4. 响应式设计
+5. 使用示例`,
+                tags: ['Shopify', 'Polaris', '电商']
+            },
+            {
+                name: 'Salesforce Lightning',
+                url: 'https://www.lightningdesignsystem.com',
+                description: 'Salesforce的Lightning设计系统，提供企业级CRM应用的设计规范。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Salesforce Lightning规范的[组件类型]。
+
+参考资源：Salesforce Lightning (https://www.lightningdesignsystem.com)
+
+我的需求：
+- 组件类型：[按钮/表单/数据展示等]
+- CRM场景：[客户管理/销售/报表等]
+- 功能需求：[具体功能]
+- 技术栈：[Lightning Web Components等]
+
+请提供：
+1. Lightning HTML结构
+2. Salesforce Sans字体使用
+3. 企业级设计规范
+4. CRM组件实现
+5. 使用示例`,
+                tags: ['Salesforce', 'Lightning', 'CRM']
+            },
+            {
+                name: 'Dribbble',
+                url: 'https://dribbble.com',
+                description: '设计师作品分享平台，提供丰富的设计灵感和创意作品。',
+                category: 'inspiration',
+                aiUsability: 'medium',
+                prompt: `我需要实现类似Dribbble上流行的[设计风格]。
+
+参考资源：Dribbble (https://dribbble.com)
+
+设计风格描述：
+- 风格特点：[玻璃拟态/新拟态/扁平化/渐变等]
+- 色彩方案：[具体颜色或配色风格]
+- 布局特点：[网格/卡片/瀑布流等]
+- 交互特点：[悬停/点击/动画等]
+
+请提供：
+1. 完整的HTML结构
+2. CSS样式实现
+3. JavaScript交互代码
+4. 响应式适配
+5. 自定义参数说明`,
+                tags: ['设计灵感', '创意作品', 'UI/UX']
+            },
+            {
+                name: 'Behance',
+                url: 'https://www.behance.net',
+                description: 'Adobe创意作品平台，展示高质量的设计项目和案例。',
+                category: 'inspiration',
+                aiUsability: 'medium',
+                prompt: `我需要实现类似Behance上展示的[设计风格]。
+
+参考资源：Behance (https://www.behance.net)
+
+设计风格描述：
+- 项目类型：[网页设计/移动应用/品牌设计等]
+- 视觉风格：[极简/奢华/科技感等]
+- 色彩搭配：[具体描述]
+- 布局特点：[具体描述]
+
+请提供：
+1. 项目页面HTML结构
+2. 视觉效果CSS实现
+3. 交互功能JavaScript
+4. 响应式设计
+5. 设计规范说明`,
+                tags: ['Adobe', '创意作品', '项目展示']
+            },
+            {
+                name: 'Awwwards',
+                url: 'https://www.awwwards.com',
+                description: '网站设计大奖，展示获奖的优秀网站作品。',
+                category: 'inspiration',
+                aiUsability: 'medium',
+                prompt: `我需要实现类似Awwwards获奖网站的[设计特点]。
+
+参考资源：Awwwards (https://www.awwwards.com)
+
+设计特点描述：
+- 网站类型：[企业官网/作品集/电商等]
+- 创意特点：[动画/交互/视觉效果等]
+- 技术特点：[3D/视差/滚动动画等]
+- 用户体验：[导航/交互/响应式等]
+
+请提供：
+1. 网站HTML结构
+2. 创意效果CSS实现
+3. 交互动画JavaScript
+4. 性能优化建议
+5. 浏览器兼容性`,
+                tags: ['网站设计', '获奖作品', '创意']
+            },
+            {
+                name: 'SiteInspire',
+                url: 'https://siteinspire.com',
+                description: '网站设计灵感库，精选优秀的网站设计案例。',
+                category: 'inspiration',
+                aiUsability: 'medium',
+                prompt: `我需要实现类似SiteInspire展示的[网站风格]。
+
+参考资源：SiteInspire (https://siteinspire.com)
+
+网站风格描述：
+- 设计风格：[极简/现代/艺术感等]
+- 色彩方案：[具体描述]
+- 布局结构：[具体描述]
+- 交互特点：[具体描述]
+
+请提供：
+1. 网站HTML结构
+2. 设计风格CSS实现
+3. 交互功能JavaScript
+4. 响应式适配
+5. 设计最佳实践`,
+                tags: ['网站设计', '灵感库', '精选']
+            },
+            {
+                name: 'CSS Winner',
+                url: 'https://www.csswinner.com',
+                description: 'CSS设计获奖作品，展示优秀的CSS实现案例。',
+                category: 'inspiration',
+                aiUsability: 'medium',
+                prompt: `我需要实现类似CSS Winner获奖作品的[CSS效果]。
+
+参考资源：CSS Winner (https://www.csswinner.com)
+
+CSS效果描述：
+- 效果类型：[动画/布局/视觉效果等]
+- 技术特点：[CSS3/动画/渐变等]
+- 视觉风格：[具体描述]
+- 兼容性要求：[现代浏览器/兼容IE等]
+
+请提供：
+1. HTML结构
+2. CSS完整代码
+3. JavaScript辅助代码
+4. 浏览器兼容性方案
+5. 性能优化建议`,
+                tags: ['CSS', '获奖作品', '技术实现']
+            },
+            {
+                name: 'Pattern Lab',
+                url: 'https://patternlab.io',
+                description: '模式实验室，帮助创建和管理设计系统的原子设计模式。',
+                category: 'pattern',
+                aiUsability: 'high',
+                prompt: `我需要使用Pattern Lab方法创建[设计系统组件]。
+
+参考资源：Pattern Lab (https://patternlab.io)
+
+我的需求：
+- 设计系统类型：[原子设计/组件化]
+- 组件类型：[原子/分子/组织/模板/页面]
+- 功能需求：[具体功能]
+- 技术栈：[具体技术]
+
+请提供：
+1. Pattern Lab HTML结构
+2. 原子设计CSS实现
+3. 组件组合JavaScript
+4. 设计系统文档
+5. 使用示例`,
+                tags: ['原子设计', '设计系统', '组件化']
+            },
+            {
+                name: 'Styleguides.io',
+                url: 'https://styleguides.io',
+                description: '样式指南资源，提供创建设计系统和样式指南的最佳实践。',
+                category: 'pattern',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Styleguides.io最佳实践的[样式指南]。
+
+参考资源：Styleguides.io (https://styleguides.io)
+
+我的需求：
+- 样式指南类型：[组件库/设计系统/文档]
+- 包含内容：[颜色/字体/组件/模式等]
+- 功能需求：[具体功能]
+- 技术栈：[具体技术]
+
+请提供：
+1. 样式指南HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 文档结构
+5. 使用指南`,
+                tags: ['样式指南', '最佳实践', '文档']
+            },
+            {
+                name: 'UI Patterns',
+                url: 'https://uipatterns.io',
+                description: 'UI模式库，收集常见的用户界面设计模式。',
+                category: 'pattern',
+                aiUsability: 'high',
+                prompt: `我需要实现UI Patterns中的[设计模式]。
+
+参考资源：UI Patterns (https://uipatterns.io)
+
+我的需求：
+- UI模式类型：[导航/表单/反馈/数据展示等]
+- 使用场景：[具体场景]
+- 功能需求：[具体功能]
+- 技术栈：[具体技术]
+
+请提供：
+1. UI模式HTML结构
+2. 模式CSS实现
+3. 交互JavaScript代码
+4. 使用场景说明
+5. 最佳实践建议`,
+                tags: ['UI模式', '交互设计', '最佳实践']
+            },
+            {
+                name: 'Mobile Patterns',
+                url: 'https://www.mobile-patterns.com',
+                description: '移动端UI模式库，专注于移动应用的设计模式。',
+                category: 'pattern',
+                aiUsability: 'high',
+                prompt: `我需要实现Mobile Patterns中的[移动端UI模式]。
+
+参考资源：Mobile Patterns (https://www.mobile-patterns.com)
+
+我的需求：
+- 移动端模式：[导航/列表/表单/手势等]
+- 平台：[iOS/Android/跨平台]
+- 功能需求：[具体功能]
+- 技术栈：[React Native/Flutter/原生等]
+
+请提供：
+1. 移动端HTML结构
+2. UI模式CSS实现
+3. 手势交互JavaScript
+4. 平台适配代码
+5. 最佳实践`,
+                tags: ['移动端', 'UI模式', 'iOS', 'Android']
+            },
+            {
+                name: 'Pttrns',
+                url: 'https://pttrns.com',
+                description: '移动应用设计模式库，展示iOS和Android的设计模式。',
+                category: 'pattern',
+                aiUsability: 'high',
+                prompt: `我需要实现Pttrns中的[移动应用设计模式]。
+
+参考资源：Pttrns (https://pttrns.com)
+
+我的需求：
+- 应用类型：[iOS/Android]
+- 设计模式：[导航/列表/表单等]
+- 功能需求：[具体功能]
+- 技术栈：[具体技术]
+
+请提供：
+1. 应用HTML结构
+2. 设计模式CSS实现
+3. 交互JavaScript代码
+4. 平台规范遵循
+5. 使用示例`,
+                tags: ['移动应用', '设计模式', 'iOS', 'Android']
+            },
+            {
+                name: 'Coolors',
+                url: 'https://coolors.co',
+                description: '配色生成器，快速创建和调整配色方案。',
+                category: 'color',
+                aiUsability: 'medium',
+                prompt: `我需要使用Coolors生成的配色方案设计页面。
+
+配色方案：
+- 主色：#HEX值
+- 辅色：#HEX值
+- 强调色：#HEX值
+- 背景色：#HEX值
+- 文字色：#HEX值
+
+请创建一个使用这些颜色的[页面类型]，并提供：
+1. 完整的CSS变量定义
+2. HTML结构
+3. 配色应用示例
+4. 可访问性检查
+5. 配色调整建议`,
+                tags: ['配色', '色彩工具', '设计工具']
+            },
+            {
+                name: 'Adobe Color',
+                url: 'https://color.adobe.com',
+                description: 'Adobe配色工具，提供专业的配色方案创建和分享。',
+                category: 'color',
+                aiUsability: 'medium',
+                prompt: `我需要使用Adobe Color创建的配色方案设计页面。
+
+配色方案：
+- 配色规则：[互补/类比/三色/四色等]
+- 颜色列表：#HEX值列表
+- 应用场景：[网页/移动应用/品牌等]
+
+请提供：
+1. 配色CSS变量定义
+2. 页面HTML结构
+3. 配色应用示例
+4. 色彩心理学建议
+5. 可访问性优化`,
+                tags: ['Adobe', '配色', '专业工具']
+            },
+            {
+                name: 'Paletton',
+                url: 'https://paletton.com',
+                description: '色彩方案设计工具，支持专业的色彩理论应用。',
+                category: 'color',
+                aiUsability: 'medium',
+                prompt: `我需要使用Paletton设计的配色方案创建页面。
+
+配色方案：
+- 基础色相：[具体色相]
+- 配色类型：[单色/互补/三色/四色]
+- 色彩数量：[具体数量]
+- 应用场景：[具体场景]
+
+请提供：
+1. 配色CSS变量定义
+2. 页面HTML结构
+3. 配色应用示例
+4. 色彩理论说明
+5. 可访问性检查`,
+                tags: ['配色', '色彩理论', '专业工具']
+            },
+            {
+                name: 'Google Fonts',
+                url: 'https://fonts.google.com',
+                description: '谷歌字体库，提供大量免费的网络字体。',
+                category: 'color',
+                aiUsability: 'medium',
+                prompt: `我需要使用Google Fonts中的[字体名称]设计页面。
+
+字体信息：
+- 字体名称：[具体字体名称]
+- 字重：[具体字重]
+- 字体样式：[具体样式]
+- 应用场景：[标题/正文/代码等]
+
+请提供：
+1. Google Fonts引入代码
+2. 字体CSS配置
+3. 页面HTML结构
+4. 排版最佳实践
+5. 字体加载优化`,
+                tags: ['Google', '字体', '排版']
+            },
+            {
+                name: 'Iconfinder',
+                url: 'https://www.iconfinder.com',
+                description: '图标搜索平台，提供丰富的图标资源。',
+                category: 'component',
+                aiUsability: 'medium',
+                prompt: `我需要使用Iconfinder中的图标设计页面。
+
+图标需求：
+- 图标类型：[具体类型]
+- 图标风格：[线性/填充/扁平等]
+- 图标数量：[具体数量]
+- 应用场景：[导航/按钮/功能等]
+
+请提供：
+1. 图标引入方法
+2. 图标使用HTML代码
+3. 图标CSS样式
+4. 图标交互效果
+5. 性能优化建议`,
+                tags: ['图标', '资源库', '设计工具']
+            },
+            {
+                name: 'Flaticon',
+                url: 'https://www.flaticon.com',
+                description: '免费图标库，提供大量可用的图标资源。',
+                category: 'component',
+                aiUsability: 'medium',
+                prompt: `我需要使用Flaticon的图标设计页面。
+
+图标需求：
+- 图标主题：[具体主题]
+- 图标风格：[具体风格]
+- 图标格式：[SVG/PNG等]
+- 应用场景：[具体场景]
+
+请提供：
+1. 图标引入代码
+2. 图标使用HTML
+3. 图标CSS样式
+4. 图标优化方法
+5. 使用示例`,
+                tags: ['图标', '免费资源', '设计工具']
+            },
+            {
+                name: 'Nucleo',
+                url: 'https://nucleoapp.com',
+                description: '高质量图标库，提供精美的SVG图标。',
+                category: 'component',
+                aiUsability: 'medium',
+                prompt: `我需要使用Nucleo图标设计页面。
+
+图标需求：
+- 图标包：[具体图标包]
+- 图标风格：[线性/填充]
+- 图标尺寸：[具体尺寸]
+- 应用场景：[具体场景]
+
+请提供：
+1. Nucleo图标引入
+2. 图标使用HTML
+3. 图标CSS样式
+4. 图标自定义方法
+5. 使用示例`,
+                tags: ['图标', '高质量', 'SVG']
+            },
+            {
+                name: 'Heroicons',
+                url: 'https://heroicons.com',
+                description: '精美SVG图标库，专为现代Web应用设计。',
+                category: 'component',
+                aiUsability: 'medium',
+                prompt: `我需要使用Heroicons图标设计页面。
+
+图标需求：
+- 图标类型：[具体类型]
+- 图标风格：[outline/solid]
+- 图标尺寸：[具体尺寸]
+- 应用场景：[具体场景]
+
+请提供：
+1. Heroicons引入方法
+2. 图标使用HTML
+3. 图标CSS样式
+4. 图标交互效果
+5. 使用示例`,
+                tags: ['图标', 'SVG', '现代']
+            },
+            {
+                name: 'Feather Icons',
+                url: 'https://feathericons.com',
+                description: '轻量级图标库，提供简洁的SVG图标。',
+                category: 'component',
+                aiUsability: 'medium',
+                prompt: `我需要使用Feather Icons设计页面。
+
+图标需求：
+- 图标类型：[具体类型]
+- 图标尺寸：[具体尺寸]
+- 应用场景：[具体场景]
+
+请提供：
+1. Feather Icons引入
+2. 图标使用HTML
+3. 图标CSS样式
+4. 图标自定义方法
+5. 性能优化建议`,
+                tags: ['图标', '轻量级', 'SVG']
+            },
+            {
+                name: 'CodePen',
+                url: 'https://codepen.io',
+                description: '代码分享平台，展示前端代码和创意实现。',
+                category: 'animation',
+                aiUsability: 'high',
+                prompt: `我需要实现类似CodePen上的[代码效果]。
+
+参考资源：CodePen (https://codepen.io)
+
+效果描述：
+- 效果类型：[动画/交互/视觉效果等]
+- 技术栈：[HTML/CSS/JavaScript等]
+- 功能需求：[具体功能]
+- 性能要求：[具体要求]
+
+请提供：
+1. 完整的HTML结构
+2. CSS样式代码
+3. JavaScript交互代码
+4. 性能优化建议
+5. 浏览器兼容性`,
+                tags: ['代码', '创意', '前端']
+            },
+            {
+                name: 'CSS Tricks',
+                url: 'https://css-tricks.com',
+                description: 'CSS技巧和教程，提供前端开发的技术文章。',
+                category: 'animation',
+                aiUsability: 'high',
+                prompt: `我需要实现CSS Tricks中介绍的[CSS技术]。
+
+参考资源：CSS Tricks (https://css-tricks.com)
+
+技术描述：
+- 技术类型：[动画/布局/特效等]
+- 应用场景：[具体场景]
+- 功能需求：[具体功能]
+- 兼容性要求：[具体要求]
+
+请提供：
+1. HTML结构
+2. CSS完整代码
+3. JavaScript辅助代码
+4. 浏览器兼容性方案
+5. 最佳实践建议`,
+                tags: ['CSS', '教程', '技巧']
+            },
+            {
+                name: 'Animate.css',
+                url: 'https://animate.style',
+                description: 'CSS动画库，提供丰富的预设动画效果。',
+                category: 'animation',
+                aiUsability: 'high',
+                prompt: `我需要使用Animate.css实现[动画效果]。
+
+参考资源：Animate.css (https://animate.style)
+
+动画需求：
+- 动画类型：[bounce/fade/zoom等]
+- 应用元素：[具体元素]
+- 触发方式：[加载/悬停/点击等]
+- 动画时长：[具体时长]
+
+请提供：
+1. Animate.css引入代码
+2. 动画应用HTML
+3. 自定义动画CSS
+4. JavaScript控制代码
+5. 使用示例`,
+                tags: ['CSS', '动画', '预设效果']
+            },
+            {
+                name: 'Hover.css',
+                url: 'https://ianlunn.github.io/Hover',
+                description: '悬停效果库，提供丰富的CSS3悬停效果。',
+                category: 'animation',
+                aiUsability: 'high',
+                prompt: `我需要使用Hover.css实现[悬停效果]。
+
+参考资源：Hover.css (https://ianlunn.github.io/Hover)
+
+效果需求：
+- 效果类型：[具体效果类型]
+- 应用元素：[按钮/卡片/图片等]
+- 效果强度：[具体描述]
+- 过渡时长：[具体时长]
+
+请提供：
+1. Hover.css引入代码
+2. 效果应用HTML
+3. 自定义效果CSS
+4. 浏览器兼容性
+5. 使用示例`,
+                tags: ['CSS', '悬停效果', '交互']
+            },
+            {
+                name: 'Smashing Magazine',
+                url: 'https://www.smashingmagazine.com',
+                description: '网页设计杂志，提供高质量的设计和开发文章。',
+                category: 'learning',
+                aiUsability: 'high',
+                prompt: `我需要按照Smashing Magazine文章中的[设计方法]实现功能。
+
+参考资源：Smashing Magazine (https://www.smashingmagazine.com)
+
+方法描述：
+- 方法类型：[设计模式/开发技巧/最佳实践等]
+- 应用场景：[具体场景]
+- 功能需求：[具体功能]
+- 技术栈：[具体技术]
+
+请提供：
+1. 完整的实现代码
+2. 设计方法说明
+3. 最佳实践建议
+4. 性能优化
+5. 浏览器兼容性`,
+                tags: ['设计', '开发', '教程']
+            },
+            {
+                name: 'A List Apart',
+                url: 'https://alistapart.com',
+                description: '网页设计文章，专注于设计和开发的最佳实践。',
+                category: 'learning',
+                aiUsability: 'high',
+                prompt: `我需要按照A List Apart文章中的[最佳实践]实现功能。
+
+参考资源：A List Apart (https://alistapart.com)
+
+实践描述：
+- 实践类型：[设计/开发/可访问性等]
+- 应用场景：[具体场景]
+- 功能需求：[具体功能]
+- 技术栈：[具体技术]
+
+请提供：
+1. 完整的实现代码
+2. 最佳实践说明
+3. 设计原则应用
+4. 可访问性实现
+5. 使用示例`,
+                tags: ['设计', '开发', '最佳实践']
+            },
+            {
+                name: 'UX Collective',
+                url: 'https://uxdesign.cc',
+                description: '用户体验文章，提供UX设计的见解和案例。',
+                category: 'learning',
+                aiUsability: 'medium',
+                prompt: `我需要按照UX Collective文章中的[UX方法]设计界面。
+
+参考资源：UX Collective (https://uxdesign.cc)
+
+方法描述：
+- UX方法：[用户研究/交互设计/可用性测试等]
+- 应用场景：[具体场景]
+- 功能需求：[具体功能]
+- 用户群体：[具体描述]
+
+请提供：
+1. UX设计HTML结构
+2. 交互CSS实现
+3. UX JavaScript代码
+4. 可用性优化
+5. 设计说明`,
+                tags: ['UX', '用户体验', '设计']
+            },
+            {
+                name: 'Medium Design',
+                url: 'https://medium.com/design',
+                description: 'Medium设计专栏，分享设计思考和案例。',
+                category: 'learning',
+                aiUsability: 'medium',
+                prompt: `我需要按照Medium Design文章中的[设计思路]实现功能。
+
+参考资源：Medium Design (https://medium.com/design)
+
+思路描述：
+- 设计思路：[具体思路]
+- 应用场景：[具体场景]
+- 功能需求：[具体功能]
+- 设计风格：[具体风格]
+
+请提供：
+1. 设计思路HTML结构
+2. 设计风格CSS实现
+3. 交互JavaScript代码
+4. 设计原则应用
+5. 使用示例`,
+                tags: ['设计', '思考', '案例']
+            },
+            {
+                name: 'Ant Design',
+                url: 'https://ant.design',
+                description: '蚂蚁集团的企业级UI设计语言，提供完整的设计规范和React组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Ant Design规范的[组件类型]。
+
+参考资源：Ant Design (https://ant.design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/表格等]
+- 设计风格：[企业级/简洁/现代]
+- 功能需求：[具体功能]
+- 技术栈：[React/Vue/原生等]
+
+请提供：
+1. Ant Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['蚂蚁集团', '企业级', 'React']
+            },
+            {
+                name: 'Element UI',
+                url: 'https://element.eleme.io',
+                description: '饿了么的Vue组件库，提供简洁美观的UI组件。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Element UI规范的[组件类型]。
+
+参考资源：Element UI (https://element.eleme.io)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/表格等]
+- 设计风格：[简洁/现代/优雅]
+- 功能需求：[具体功能]
+- 技术栈：[Vue/React等]
+
+请提供：
+1. Element UI HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['饿了么', 'Vue', '组件库']
+            },
+            {
+                name: 'Bootstrap',
+                url: 'https://getbootstrap.com',
+                description: 'Twitter的开源前端框架，提供响应式设计和丰富的组件。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Bootstrap规范的[组件类型]。
+
+参考资源：Bootstrap (https://getbootstrap.com)
+
+我的需求：
+- Bootstrap版本：[Bootstrap 4/Bootstrap 5]
+- 组件类型：[按钮/表单/导航/卡片等]
+- 功能需求：[具体功能]
+- 响应式：[需要/不需要]
+
+请提供：
+1. Bootstrap HTML结构
+2. Bootstrap CSS类名
+3. 组件实现代码
+4. 响应式断点
+5. 使用示例`,
+                tags: ['Twitter', '开源', '响应式']
+            },
+            {
+                name: 'Tailwind CSS',
+                url: 'https://tailwindcss.com',
+                description: '实用优先的CSS框架，提供原子化的工具类。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要使用Tailwind CSS创建[组件类型]。
+
+参考资源：Tailwind CSS (https://tailwindcss.com)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[现代/简洁/自定义]
+- 功能需求：[具体功能]
+- 响应式：[需要/不需要]
+
+请提供：
+1. Tailwind HTML结构
+2. Tailwind工具类组合
+3. 组件实现代码
+4. 响应式类名
+5. 自定义配置方法`,
+                tags: ['原子CSS', '工具类', '现代']
+            },
+            {
+                name: 'Vercel Design',
+                url: 'https://vercel.com/design',
+                description: 'Vercel的设计系统，强调简洁、现代和开发者友好。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Vercel Design规范的[组件类型]。
+
+参考资源：Vercel Design (https://vercel.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航等]
+- 设计风格：[简洁/现代/开发者友好]
+- 功能需求：[具体功能]
+- 技术栈：[React/Next.js等]
+
+请提供：
+1. Vercel Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Vercel', '现代', '开发者']
+            },
+            {
+                name: 'Linear Design',
+                url: 'https://linear.app/design',
+                description: 'Linear的设计系统，强调流畅、优雅和高效。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Linear Design规范的[组件类型]。
+
+参考资源：Linear Design (https://linear.app/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航等]
+- 设计风格：[流畅/优雅/高效]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Linear Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Linear', '优雅', '高效']
+            },
+            {
+                name: 'Notion Design',
+                url: 'https://www.notion.so/design',
+                description: 'Notion的设计系统，强调简洁、灵活和协作友好。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Notion Design规范的[组件类型]。
+
+参考资源：Notion Design (https://www.notion.so/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航等]
+- 设计风格：[简洁/灵活/协作]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Notion Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Notion', '简洁', '协作']
+            },
+            {
+                name: 'Stripe Design',
+                url: 'https://stripe.com/design',
+                description: 'Stripe的设计系统，强调优雅、现代和支付友好。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Stripe Design规范的[组件类型]。
+
+参考资源：Stripe Design (https://stripe.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/支付组件等]
+- 设计风格：[优雅/现代/支付友好]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Stripe Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Stripe', '优雅', '支付']
+            },
+            {
+                name: 'Airbnb Design',
+                url: 'https://airbnb.design',
+                description: 'Airbnb的设计系统，强调简洁、现代和旅行友好。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Airbnb Design规范的[组件类型]。
+
+参考资源：Airbnb Design (https://airbnb.design)
+
+我的需求：
+- 组件类型：[按钮/表单/卡片等]
+- 设计风格：[简洁/现代/旅行友好]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Airbnb Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Airbnb', '现代', '旅行']
+            },
+            {
+                name: 'Spotify Design',
+                url: 'https://developer.spotify.com/design',
+                description: 'Spotify的设计系统，强调音乐、情感和沉浸式体验。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Spotify Design规范的[组件类型]。
+
+参考资源：Spotify Design (https://developer.spotify.com/design)
+
+我的需求：
+- 组件类型：[按钮/播放器/卡片等]
+- 设计风格：[音乐/情感/沉浸式]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Spotify Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Spotify', '音乐', '沉浸式']
+            },
+            {
+                name: 'Figma Design',
+                url: 'https://www.figma.com/design',
+                description: 'Figma的设计系统，强调协作、设计和开发一体化。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Figma Design规范的[组件类型]。
+
+参考资源：Figma Design (https://www.figma.com/design)
+
+我的需求：
+- 组件类型：[按钮/工具/面板等]
+- 设计风格：[协作/设计开发一体化]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Figma Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Figma', '协作', '设计工具']
+            },
+            {
+                name: 'Discord Design',
+                url: 'https://discord.com/design',
+                description: 'Discord的设计系统，强调社区、游戏和年轻化。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Discord Design规范的[组件类型]。
+
+参考资源：Discord Design (https://discord.com/design)
+
+我的需求：
+- 组件类型：[按钮/聊天/消息等]
+- 设计风格：[社区/游戏/年轻化]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Discord Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Discord', '社区', '游戏']
+            },
+            {
+                name: 'Slack Design',
+                url: 'https://api.slack.com/design-systems',
+                description: 'Slack的设计系统，强调协作、沟通和简洁。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Slack Design规范的[组件类型]。
+
+参考资源：Slack Design (https://api.slack.com/design-systems)
+
+我的需求：
+- 组件类型：[按钮/聊天/消息等]
+- 设计风格：[协作/沟通/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Slack Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Slack', '协作', '沟通']
+            },
+            {
+                name: 'Framer Motion',
+                url: 'https://www.framer.com/motion',
+                description: 'React动画库，提供声明式动画和手势支持。',
+                category: 'animation',
+                aiUsability: 'high',
+                prompt: `我需要使用Framer Motion实现[动画效果]。
+
+参考资源：Framer Motion (https://www.framer.com/motion)
+
+动画需求：
+- 动画类型：[过渡/手势/布局动画等]
+- React版本：[React 16/17/18]
+- 功能需求：[具体功能]
+- 性能要求：[高性能/轻量级]
+
+请提供：
+1. Framer Motion HTML结构
+2. 动画组件代码
+3. 手势交互实现
+4. 性能优化建议
+5. 使用示例`,
+                tags: ['React', '动画', '手势']
+            },
+            {
+                name: 'React Spring',
+                url: 'https://www.react-spring.dev',
+                description: 'React弹簧动画库，提供物理效果的动画。',
+                category: 'animation',
+                aiUsability: 'high',
+                prompt: `我需要使用React Spring实现[动画效果]。
+
+参考资源：React Spring (https://www.react-spring.dev)
+
+动画需求：
+- 动画类型：[弹簧/过渡/物理效果等]
+- React版本：[React 16/17/18]
+- 功能需求：[具体功能]
+- 性能要求：[高性能/轻量级]
+
+请提供：
+1. React Spring HTML结构
+2. 动画组件代码
+3. 弹簧物理效果
+4. 性能优化建议
+5. 使用示例`,
+                tags: ['React', '动画', '物理']
+            },
+            {
+                name: 'Three.js',
+                url: 'https://threejs.org',
+                description: '3D图形库，提供WebGL的3D渲染功能。',
+                category: 'animation',
+                aiUsability: 'high',
+                prompt: `我需要使用Three.js实现[3D效果]。
+
+参考资源：Three.js (https://threejs.org)
+
+3D需求：
+- 3D类型：[模型/场景/粒子等]
+- 功能需求：[具体功能]
+- 性能要求：[高性能/优化]
+- 浏览器：[现代浏览器/兼容性]
+
+请提供：
+1. Three.js HTML结构
+2. 3D场景代码
+3. 渲染器配置
+4. 性能优化建议
+5. 使用示例`,
+                tags: ['3D', 'WebGL', '图形']
+            },
+            {
+                name: 'Lottie',
+                url: 'https://airbnb.io/lottie',
+                description: '动画库，支持After Effects动画导出为JSON格式。',
+                category: 'animation',
+                aiUsability: 'high',
+                prompt: `我需要使用Lottie实现[动画效果]。
+
+参考资源：Lottie (https://airbnb.io/lottie)
+
+动画需求：
+- 动画类型：[JSON动画/矢量动画等]
+- 来源：[After Effects/LottieFiles]
+- 功能需求：[具体功能]
+- 性能要求：[高性能/轻量级]
+
+请提供：
+1. Lottie HTML结构
+2. Lottie Web Player代码
+3. 动画加载方法
+4. 性能优化建议
+5. 使用示例`,
+                tags: ['Airbnb', '动画', 'JSON']
+            },
+            {
+                name: 'Dribbble Shots',
+                url: 'https://dribbble.com/shots',
+                description: 'Dribbble的作品展示，提供高质量的设计灵感。',
+                category: 'inspiration',
+                aiUsability: 'medium',
+                prompt: `我需要实现类似Dribbble Shots的[设计风格]。
+
+参考资源：Dribbble Shots (https://dribbble.com/shots)
+
+设计风格描述：
+- 风格特点：[玻璃拟态/新拟态/扁平化/渐变等]
+- 色彩方案：[具体颜色或配色风格]
+- 布局特点：[网格/卡片/瀑布流等]
+- 交互特点：[悬停/点击/动画等]
+
+请提供：
+1. 完整的HTML结构
+2. CSS样式实现
+3. JavaScript交互代码
+4. 响应式适配
+5. 自定义参数说明`,
+                tags: ['设计灵感', '作品展示', 'UI/UX']
+            },
+            {
+                name: 'Pinterest Design',
+                url: 'https://design.pinterest.com',
+                description: 'Pinterest的设计系统，强调发现、收藏和视觉化。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Pinterest Design规范的[组件类型]。
+
+参考资源：Pinterest Design (https://design.pinterest.com)
+
+我的需求：
+- 组件类型：[按钮/卡片/瀑布流等]
+- 设计风格：[发现/收藏/视觉化]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Pinterest Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Pinterest', '发现', '视觉化']
+            },
+            {
+                name: 'Uber Design',
+                url: 'https://www.uber.com/design',
+                description: 'Uber的设计系统，强调移动、出行和简洁。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Uber Design规范的[组件类型]。
+
+参考资源：Uber Design (https://www.uber.com/design)
+
+我的需求：
+- 组件类型：[按钮/地图/出行组件等]
+- 设计风格：[移动/出行/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Uber Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Uber', '移动', '出行']
+            },
+            {
+                name: 'Atlassian Design',
+                url: 'https://atlassian.design',
+                description: 'Atlassian的设计系统，提供Jira、Confluence等产品的设计规范。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Atlassian Design规范的[组件类型]。
+
+参考资源：Atlassian Design (https://atlassian.design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 产品风格：[Jira/Confluence/Trello等]
+- 设计风格：[企业级/协作/简洁]
+- 功能需求：[具体功能]
+
+请提供：
+1. Atlassian Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Atlassian', '企业级', '协作']
+            },
+            {
+                name: 'Shopify Polaris',
+                url: 'https://polaris.shopify.com',
+                description: 'Shopify的设计系统，为电商平台提供完整的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Shopify Polaris规范的[组件类型]。
+
+参考资源：Shopify Polaris (https://polaris.shopify.com)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[电商/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Polaris HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Shopify', '电商', 'React']
+            },
+            {
+                name: 'IBM Carbon Design',
+                url: 'https://carbondesignsystem.com',
+                description: 'IBM的Carbon设计系统，提供企业级的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合IBM Carbon Design规范的[组件类型]。
+
+参考资源：IBM Carbon Design (https://carbondesignsystem.com)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[企业级/科技/现代]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Carbon Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['IBM', '企业级', 'Carbon']
+            },
+            {
+                name: 'Spectrum Design',
+                url: 'https://spectrum.adobe.com',
+                description: 'Adobe的Spectrum设计系统，提供Creative Cloud等产品的设计规范。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Adobe Spectrum Design规范的[组件类型]。
+
+参考资源：Adobe Spectrum Design (https://spectrum.adobe.com)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[创意/现代/专业]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Spectrum Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Adobe', '创意', 'Spectrum']
+            },
+            {
+                name: 'Salesforce Lightning',
+                url: 'https://www.lightningdesignsystem.com',
+                description: 'Salesforce的Lightning设计系统，提供CRM平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Salesforce Lightning规范的[组件类型]。
+
+参考资源：Salesforce Lightning (https://www.lightningdesignsystem.com)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[企业级/CRM/现代]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Lightning HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Salesforce', 'CRM', '企业级']
+            },
+            {
+                name: 'GitLab Pajamas',
+                url: 'https://design.gitlab.com',
+                description: 'GitLab的Pajamas设计系统，提供DevOps平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合GitLab Pajamas规范的[组件类型]。
+
+参考资源：GitLab Pajamas (https://design.gitlab.com)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[DevOps/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[Vue/原生等]
+
+请提供：
+1. Pajamas HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['GitLab', 'DevOps', 'Vue']
+            },
+            {
+                name: 'GitHub Primer',
+                url: 'https://primer.style',
+                description: 'GitHub的Primer设计系统，提供开发者平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合GitHub Primer规范的[组件类型]。
+
+参考资源：GitHub Primer (https://primer.style)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[开发者/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Primer HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['GitHub', '开发者', 'React']
+            },
+            {
+                name: 'MongoDB Design',
+                url: 'https://www.mongodb.design',
+                description: 'MongoDB的设计系统，提供数据库平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合MongoDB Design规范的[组件类型]。
+
+参考资源：MongoDB Design (https://www.mongodb.design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[数据库/现代/科技]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. MongoDB Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['MongoDB', '数据库', '科技']
+            },
+            {
+                name: 'Auth0 Design',
+                url: 'https://auth0.design',
+                description: 'Auth0的设计系统，提供身份认证平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Auth0 Design规范的[组件类型]。
+
+参考资源：Auth0 Design (https://auth0.design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[认证/安全/现代]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Auth0 Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Auth0', '认证', '安全']
+            },
+            {
+                name: 'Twilio Paste',
+                url: 'https://paste.twilio.design',
+                description: 'Twilio的Paste设计系统，提供通信平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Twilio Paste规范的[组件类型]。
+
+参考资源：Twilio Paste (https://paste.twilio.design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[通信/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Paste HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Twilio', '通信', 'React']
+            },
+            {
+                name: 'Segment Design',
+                url: 'https://segment.com/design',
+                description: 'Segment的设计系统，提供数据分析平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Segment Design规范的[组件类型]。
+
+参考资源：Segment Design (https://segment.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[数据分析/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Segment Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Segment', '数据分析', 'React']
+            },
+            {
+                name: 'Intercom Design',
+                url: 'https://www.intercom.com/design',
+                description: 'Intercom的设计系统，提供客户沟通平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Intercom Design规范的[组件类型]。
+
+参考资源：Intercom Design (https://www.intercom.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[客户沟通/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Intercom Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Intercom', '客户沟通', 'React']
+            },
+            {
+                name: 'Zendesk Garden',
+                url: 'https://garden.zendesk.com',
+                description: 'Zendesk的Garden设计系统，提供客户服务平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Zendesk Garden规范的[组件类型]。
+
+参考资源：Zendesk Garden (https://garden.zendesk.com)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[客户服务/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Garden HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Zendesk', '客户服务', 'React']
+            },
+            {
+                name: 'Help Scout Design',
+                url: 'https://helpscout.com/design',
+                description: 'Help Scout的设计系统，提供客户支持平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Help Scout Design规范的[组件类型]。
+
+参考资源：Help Scout Design (https://helpscout.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[客户支持/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Help Scout Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Help Scout', '客户支持', 'React']
+            },
+            {
+                name: 'Mailchimp Design',
+                url: 'https://mailchimp.com/design',
+                description: 'Mailchimp的设计系统，提供邮件营销平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Mailchimp Design规范的[组件类型]。
+
+参考资源：Mailchimp Design (https://mailchimp.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[邮件营销/现代/创意]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Mailchimp Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Mailchimp', '邮件营销', '创意']
+            },
+            {
+                name: 'Canva Design',
+                url: 'https://www.canva.com/design',
+                description: 'Canva的设计系统，提供在线设计平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Canva Design规范的[组件类型]。
+
+参考资源：Canva Design (https://www.canva.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[在线设计/现代/创意]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Canva Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Canva', '在线设计', '创意']
+            },
+            {
+                name: 'Framer Design',
+                url: 'https://www.framer.com/design',
+                description: 'Framer的设计系统，提供交互设计平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Framer Design规范的[组件类型]。
+
+参考资源：Framer Design (https://www.framer.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[交互设计/现代/创意]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Framer Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Framer', '交互设计', 'React']
+            },
+            {
+                name: 'Sketch Design',
+                url: 'https://www.sketch.com/design',
+                description: 'Sketch的设计系统，提供设计工具平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Sketch Design规范的[组件类型]。
+
+参考资源：Sketch Design (https://www.sketch.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[设计工具/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Sketch Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Sketch', '设计工具', '简洁']
+            },
+            {
+                name: 'InVision Design',
+                url: 'https://www.invisionapp.com/design',
+                description: 'InVision的设计系统，提供原型设计平台的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合InVision Design规范的[组件类型]。
+
+参考资源：InVision Design (https://www.invisionapp.com/design)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[原型设计/现代/简洁]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. InVision Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['InVision', '原型设计', '简洁']
+            },
+            {
+                name: 'Adobe XD Design',
+                url: 'https://www.adobe.com/products/xd',
+                description: 'Adobe XD的设计系统，提供UI/UX设计工具的设计规范和组件库。',
+                category: 'company',
+                aiUsability: 'high',
+                prompt: `我需要创建一个符合Adobe XD Design规范的[组件类型]。
+
+参考资源：Adobe XD Design (https://www.adobe.com/products/xd)
+
+我的需求：
+- 组件类型：[按钮/表单/导航/卡片等]
+- 设计风格：[UI/UX设计/现代/专业]
+- 功能需求：[具体功能]
+- 技术栈：[React/原生等]
+
+请提供：
+1. Adobe XD Design HTML结构
+2. 设计规范CSS变量
+3. 组件实现代码
+4. 使用示例
+5. 最佳实践建议`,
+                tags: ['Adobe XD', 'UI/UX', '专业']
+            },
+            {
+                name: 'Figma Community',
+                url: 'https://www.figma.com/community',
+                description: 'Figma社区，提供丰富的设计资源和组件库。',
+                category: 'community',
+                aiUsability: 'high',
+                prompt: `我需要参考Figma Community中的资源来创建[组件类型]。
+
+参考资源：Figma Community (https://www.figma.com/community)
+
+我的需求：
+- 组件类型：[具体组件]
+- 设计风格：[现代/简洁/创意等]
+- 功能需求：[具体需求]
+- 技术栈：[React/Vue/原生等]
+
+请提供：
+1. 组件的完整实现代码
+2. 设计系统变量定义
+3. 组件使用示例
+4. 设计规范文档`,
+                tags: ['Figma', '社区', '资源']
+            },
+            {
+                name: 'UI8 Design',
+                url: 'https://ui8.net',
+                description: 'UI8提供高质量的UI设计资源和模板。',
+                category: 'community',
+                aiUsability: 'medium',
+                prompt: `我需要参考UI8中的设计资源来创建[组件类型]。
+
+参考资源：UI8 (https://ui8.net)
+
+我的需求：
+- 组件类型：[具体组件]
+- 设计风格：[现代/简洁/创意等]
+- 功能需求：[具体需求]
+- 技术栈：[React/Vue/原生等]
+
+请提供：
+1. 组件的完整实现代码
+2. 设计系统变量定义
+3. 组件使用示例
+4. 设计规范文档`,
+                tags: ['UI8', '资源', '模板']
+            },
+            {
+                name: 'Creative Market',
+                url: 'https://creativemarket.com',
+                description: 'Creative Market提供创意设计资源和模板。',
+                category: 'community',
+                aiUsability: 'medium',
+                prompt: `我需要参考Creative Market中的设计资源来创建[组件类型]。
+
+参考资源：Creative Market (https://creativemarket.com)
+
+我的需求：
+- 组件类型：[具体组件]
+- 设计风格：[现代/简洁/创意等]
+- 功能需求：[具体需求]
+- 技术栈：[React/Vue/原生等]
+
+请提供：
+1. 组件的完整实现代码
+2. 设计系统变量定义
+3. 组件使用示例
+4. 设计规范文档`,
+                tags: ['Creative Market', '资源', '模板']
+            },
+            {
+                name: 'Envato Elements',
+                url: 'https://elements.envato.com',
+                description: 'Envato Elements提供丰富的设计资源和模板。',
+                category: 'community',
+                aiUsability: 'medium',
+                prompt: `我需要参考Envato Elements中的设计资源来创建[组件类型]。
+
+参考资源：Envato Elements (https://elements.envato.com)
+
+我的需求：
+- 组件类型：[具体组件]
+- 设计风格：[现代/简洁/创意等]
+- 功能需求：[具体需求]
+- 技术栈：[React/Vue/原生等]
+
+请提供：
+1. 组件的完整实现代码
+2. 设计系统变量定义
+3. 组件使用示例
+4. 设计规范文档`,
+                tags: ['Envato', '资源', '模板']
+            },
+            {
+                name: 'Awwwards',
+                url: 'https://www.awwwards.com',
+                description: 'Awwwards展示最佳网站设计和创意作品。',
+                category: 'community',
+                aiUsability: 'medium',
+                prompt: `我需要参考Awwwards中的获奖网站来创建[组件类型]。
+
+参考资源：Awwwards (https://www.awwwards.com)
+
+我的需求：
+- 组件类型：[具体组件]
+- 设计风格：[现代/创意/获奖作品等]
+- 功能需求：[具体需求]
+- 技术栈：[React/Vue/原生等]
+
+请提供：
+1. 组件的完整实现代码
+2. 设计系统变量定义
+3. 组件使用示例
+4. 设计规范文档`,
+                tags: ['Awwwards', '获奖作品', '创意']
+            },
+            {
+                name: 'CSS-Tricks',
+                url: 'https://css-tricks.com',
+                description: 'CSS-Tricks提供前端设计和开发的教程和资源。',
+                category: 'community',
+                aiUsability: 'high',
+                prompt: `我需要参考CSS-Tricks中的教程来创建[组件类型]。
+
+参考资源：CSS-Tricks (https://css-tricks.com)
+
+我的需求：
+- 组件类型：[具体组件]
+- 技术方向：[CSS/JavaScript/React等]
+- 功能需求：[具体需求]
+- 技术栈：[React/Vue/原生等]
+
+请提供：
+1. 组件的完整实现代码
+2. CSS样式代码
+3. JavaScript交互代码
+4. 使用示例和最佳实践`,
+                tags: ['CSS-Tricks', '教程', '前端']
+            }
+        ];
+
+        function renderResources(filter = 'all') {
+            const container = document.getElementById('resourcesContainer');
+            container.innerHTML = '';
+
+            const filtered = filter === 'all' 
+                ? resources 
+                : resources.filter(r => r.category === filter);
+
+            filtered.forEach(resource => {
+                const card = document.createElement('div');
+                card.className = 'resource-card';
+
+                const aiUsabilityText = resource.aiUsability === 'high' ? '高度适合' : 
+                                     resource.aiUsability === 'medium' ? '中度适合' : '需要描述';
+                const aiUsabilityClass = resource.aiUsability;
+
+                card.innerHTML = `
+                    <div class="resource-header">
+                        <div class="resource-title">
+                            ${resource.name}
+                        </div>
+                        <a href="${resource.url}" class="resource-url" target="_blank">${resource.url}</a>
+                        <div class="resource-description">${resource.description}</div>
+                        <div class="resource-meta">
+                            <div class="meta-item">
+                                <span class="meta-badge ${aiUsabilityClass}">${aiUsabilityText}</span>
+                            </div>
+                            ${resource.tags.map(tag => `
+                                <div class="meta-item">
+                                    <span class="meta-badge" style="background: var(--bg-secondary); color: var(--text-secondary);">${tag}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="resource-actions">
+                            <button class="action-btn primary" onclick="copyPrompt('${encodeURIComponent(resource.prompt)}')">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M8 5H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h2"/>
+                                    <path d="M16 1h-2a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2z"/>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                </svg>
+                                复制提示词
+                            </button>
+                            <button class="action-btn" onclick="window.open('${resource.url}', '_blank')">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                    <polyline points="15 3 21 3 21 9"/>
+                                </svg>
+                                访问网站
+                            </button>
+                        </div>
+                    </div>
+                    <div class="prompt-preview">
+                        <div class="prompt-title">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            AI提示词预览
+                        </div>
+                        <div class="prompt-content">${resource.prompt}</div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            updateFilterButtons(filter);
+        }
+
+        function filterResources(category) {
+            renderResources(category);
+        }
+
+        function updateFilterButtons(activeCategory) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === getCategoryText(activeCategory)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function getCategoryText(category) {
+            const map = {
+                'all': '全部',
+                'design-system': '设计系统',
+                'company': '大厂规范',
+                'inspiration': '创意灵感',
+                'pattern': '设计模式',
+                'color': '色彩排版',
+                'component': '组件图标',
+                'animation': '交互动画',
+                'learning': '学习教程'
+            };
+            return map[category] || '全部';
+        }
+
+        function copyPrompt(prompt) {
+            const decodedPrompt = decodeURIComponent(prompt);
+            navigator.clipboard.writeText(decodedPrompt).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            document.getElementById('themeText').textContent = next === 'dark' ? '亮色' : '暗黑';
+        }
+
+        renderResources();
+    </script>
+</body>
+</html>

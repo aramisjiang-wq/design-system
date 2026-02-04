@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify Polaris 示例</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            background: #F6F6F7;
+            color: #202223;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .Polaris-Button {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .Polaris-TextField__Input {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 16px;
+        }
+
+        header {
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #E1E3E5;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #202223;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #6D7175;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #202223;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E1E3E5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border: 1px solid #E1E3E5;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #202223;
+        }
+
+        .card-content {
+            font-size: 14px;
+            color: #6D7175;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .Polaris-Button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .Polaris-Button--primary {
+            background: #008060;
+            color: #FFFFFF;
+        }
+
+        .Polaris-Button--primary:hover {
+            background: #006F50;
+        }
+
+        .Polaris-Button--secondary {
+            background: #E1E3E5;
+            color: #202223;
+        }
+
+        .Polaris-Button--secondary:hover {
+            background: #D1D5DB;
+        }
+
+        .Polaris-Button--tertiary {
+            background: transparent;
+            color: #202223;
+        }
+
+        .Polaris-Button--tertiary:hover {
+            background: #F1F2F3;
+        }
+
+        .Polaris-Button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .Polaris-TextField {
+            margin-bottom: 16px;
+        }
+
+        .Polaris-Label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #202223;
+            margin-bottom: 8px;
+        }
+
+        .Polaris-TextField__Input {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-family: inherit;
+            border: 1px solid #E1E3E5;
+            border-radius: 4px;
+            background: #FFFFFF;
+            color: #202223;
+            transition: border-color 0.2s;
+        }
+
+        .Polaris-TextField__Input:focus {
+            outline: none;
+            border-color: #008060;
+            box-shadow: 0 0 0 2px rgba(0, 128, 96, 0.1);
+        }
+
+        .Polaris-TextField__Input:disabled {
+            background: #F6F6F7;
+            opacity: 0.4;
+        }
+
+        .Polaris-Badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .Polaris-Badge--statusSuccess {
+            background: #E3FCEF9;
+            color: #006F50;
+        }
+
+        .Polaris-Badge--statusInfo {
+            background: #DEEBFF;
+            color: #004F88;
+        }
+
+        .Polaris-Badge--statusWarning {
+            background: #FFFAE6;
+            color: #FF8B00;
+        }
+
+        .Polaris-Badge--statusAttention {
+            background: #FFEBE6;
+            color: #BF2600;
+        }
+
+        .Polaris-Avatar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #E1E3E5;
+            color: #6D7175;
+            font-weight: 600;
+            overflow: hidden;
+        }
+
+        .Polaris-Avatar--sizeSmall {
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+        }
+
+        .Polaris-Avatar--sizeMedium {
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
+        }
+
+        .Polaris-Avatar--sizeLarge {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+
+        .Polaris-Avatar__Initials {
+            text-transform: uppercase;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 1px solid #E1E3E5;
+            border-radius: 4px;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            vertical-align: top;
+        }
+
+        .color-label {
+            font-size: 12px;
+            color: #6D7175;
+            display: block;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Shopify Polaris</h1>
+            <p class="subtitle">Shopify 官方设计系统示例</p>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">按钮</h2>
+            <div class="card">
+                <button class="Polaris-Button Polaris-Button--primary">主要按钮</button>
+                <button class="Polaris-Button Polaris-Button--secondary">次要按钮</button>
+                <button class="Polaris-Button Polaris-Button--tertiary">第三按钮</button>
+                <button class="Polaris-Button Polaris-Button--primary" disabled>禁用按钮</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">输入框</h2>
+            <div class="card">
+                <div class="Polaris-TextField">
+                    <label class="Polaris-Label" for="email">邮箱地址</label>
+                    <input type="email" id="email" class="Polaris-TextField__Input" placeholder="请输入邮箱地址">
+                </div>
+                <div class="Polaris-TextField">
+                    <label class="Polaris-Label" for="password">密码</label>
+                    <input type="password" id="password" class="Polaris-TextField__Input" placeholder="请输入密码">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">徽章</h2>
+            <div class="card">
+                <span class="Polaris-Badge Polaris-Badge--statusSuccess">成功</span>
+                <span class="Polaris-Badge Polaris-Badge--statusInfo">信息</span>
+                <span class="Polaris-Badge Polaris-Badge--statusWarning">警告</span>
+                <span class="Polaris-Badge Polaris-Badge--statusAttention">注意</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">头像</h2>
+            <div class="card">
+                <span class="Polaris-Avatar Polaris-Avatar--sizeSmall">
+                    <span class="Polaris-Avatar__Initials">A</span>
+                </span>
+                <span class="Polaris-Avatar Polaris-Avatar--sizeMedium">
+                    <span class="Polaris-Avatar__Initials">B</span>
+                </span>
+                <span class="Polaris-Avatar Polaris-Avatar--sizeLarge">
+                    <span class="Polaris-Avatar__Initials">C</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">色彩系统</h2>
+            <div class="card">
+                <div class="color-swatch" style="background: #008060;">
+                    <span class="color-label">#008060</span>
+                </div>
+                <div class="color-swatch" style="background: #006F50;">
+                    <span class="color-label">#006F50</span>
+                </div>
+                <div class="color-swatch" style="background: #FFC453;">
+                    <span class="color-label">#FFC453</span>
+                </div>
+                <div class="color-swatch" style="background: #D82C0D;">
+                    <span class="color-label">#D82C0D</span>
+                </div>
+                <div class="color-swatch" style="background: #202223;">
+                    <span class="color-label">#202223</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

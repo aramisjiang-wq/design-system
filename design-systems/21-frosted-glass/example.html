@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>磨砂玻璃设计示例</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1e293b;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .btn {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .input {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .card-content {
+            font-size: 1rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(99, 102, 241, 0.9);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+        }
+
+        .btn:hover {
+            background: rgba(99, 102, 241, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.5);
+            color: #1e293b;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            color: #1e293b;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: rgba(99, 102, 241, 0.5);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .input::placeholder {
+            color: #94a3b8;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            vertical-align: top;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-label {
+            font-size: 0.75rem;
+            color: #475569;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #6366f1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+
+        .list-item {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+        }
+
+        .list-item-title {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .list-item-desc {
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>磨砂玻璃设计示例</h1>
+            <p class="subtitle">FROSTED GLASS DESIGN EXAMPLE</p>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">按钮</h2>
+            <div class="card">
+                <button class="btn">默认按钮</button>
+                <button class="btn btn-secondary">次要按钮</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">输入框</h2>
+            <div class="card">
+                <input type="text" class="input" placeholder="输入文本...">
+                <input type="email" class="input" placeholder="输入邮箱...">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">卡片</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3 class="card-title">卡片标题</h3>
+                    <p class="card-content">这是一个示例卡片，展示了磨砂玻璃设计的排版和间距。</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">统计数据</h3>
+                    <div class="stat-value">1,234</div>
+                    <p class="stat-label">总访问量</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">色彩系统</h2>
+            <div class="card">
+                <div class="color-swatch" style="background: #6366f1;">
+                    <span class="color-label">#6366f1</span>
+                </div>
+                <div class="color-swatch" style="background: #8b5cf6;">
+                    <span class="color-label">#8b5cf6</span>
+                </div>
+                <div class="color-swatch" style="background: #ec4899;">
+                    <span class="color-label">#ec4899</span>
+                </div>
+                <div class="color-swatch" style="background: #ffffff;">
+                    <span class="color-label">#ffffff</span>
+                </div>
+                <div class="color-swatch" style="background: #f8fafc;">
+                    <span class="color-label">#f8fafc</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">列表</h2>
+            <div class="card">
+                <div class="list-item">
+                    <div class="list-item-title">项目一</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目二</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目三</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

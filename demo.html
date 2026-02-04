@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计规范演示 - Design Systems Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .style-selector {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .style-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: #ffffff;
+            color: #333;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+        }
+
+        .style-btn:hover {
+            background: #f5f5f5;
+            border-color: #999;
+        }
+
+        .style-btn.active {
+            background: #333;
+            color: #ffffff;
+            border-color: #333;
+        }
+
+        .demo-section {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .component-group {
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .component-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .demo-card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background: #f5f5f5;
+        }
+
+        .demo-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-card p {
+            font-size: 0.875rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .color-swatch {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .demo-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .style-info {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .style-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .style-info p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .style-info ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .style-info li {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 工业实用主义 */
+        .industrial body {
+            font-family: 'JetBrains Mono', monospace;
+            background: #0d0d0d;
+            color: #e8e8e8;
+        }
+
+        .industrial .container {
+            max-width: 1400px;
+        }
+
+        .industrial .style-btn {
+            font-family: 'JetBrains Mono', monospace;
+            background: #1a1a1a;
+            color: #e8e8e8;
+            border-color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 0;
+        }
+
+        .industrial .style-btn:hover {
+            background: #333;
+            border-color: #666;
+        }
+
+        .industrial .style-btn.active {
+            background: #444;
+            border-color: #666;
+        }
+
+        .industrial .demo-section {
+            background: #0d0d0d;
+            border: 1px solid #333;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .industrial .section-title {
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 2px solid #333;
+        }
+
+        .industrial .component-group {
+            border: 1px solid #333;
+            border-radius: 0;
+            background: #1a1a1a;
+        }
+
+        .industrial .component-label {
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .industrial .demo-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 0;
+        }
+
+        .industrial .demo-card h3 {
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .industrial .demo-card p {
+            color: #666;
+        }
+
+        .industrial .color-swatch {
+            border-radius: 0;
+            border: 1px solid #333;
+        }
+
+        .industrial .btn-group .style-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #333;
+            background: #1a1a1a;
+            color: #e8e8e8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 0;
+        }
+
+        .industrial .demo-input {
+            background: #0d0d0d;
+            border: 1px solid #333;
+            color: #e8e8e8;
+            border-radius: 0;
+        }
+
+        .industrial .style-info {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 0;
+        }
+
+        .industrial .style-info h2 {
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .industrial .style-info p,
+        .industrial .style-info li {
+            color: #666;
+        }
+
+        /* 极简主义 */
+        .minimalism body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .minimalism .style-btn {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #000000;
+            border-color: #000000;
+            border-radius: 4px;
+        }
+
+        .minimalism .style-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .minimalism .style-btn.active {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .minimalism .demo-section {
+            background: #ffffff;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .minimalism .section-title {
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .minimalism .component-group {
+            border: none;
+            background: #f7f7f7;
+            border-radius: 8px;
+        }
+
+        .minimalism .demo-card {
+            background: #ffffff;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .minimalism .demo-card p {
+            color: #737373;
+        }
+
+        .minimalism .color-swatch {
+            border-radius: 4px;
+        }
+
+        .minimalism .btn-group .style-btn {
+            padding: 0.75rem 1.5rem;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .minimalism .demo-input {
+            background: #f7f7f7;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+        }
+
+        .minimalism .style-info {
+            background: #f7f7f7;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .minimalism .style-info p,
+        .minimalism .style-info li {
+            color: #737373;
+        }
+
+        /* 扁平化设计 */
+        .flat-design body {
+            font-family: 'Roboto', sans-serif;
+            background: #fafafa;
+            color: #212121;
+        }
+
+        .flat-design .style-btn {
+            font-family: 'Roboto', sans-serif;
+            background: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .flat-design .style-btn:hover {
+            background: #2980b9;
+        }
+
+        .flat-design .style-btn.active {
+            background: #2c3e50;
+        }
+
+        .flat-design .demo-section {
+            background: #ffffff;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .flat-design .section-title {
+            border-bottom: 2px solid #3498db;
+        }
+
+        .flat-design .component-group {
+            border: none;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .flat-design .demo-card {
+            background: #ffffff;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .flat-design .demo-card p {
+            color: #757575;
+        }
+
+        .flat-design .color-swatch {
+            border-radius: 4px;
+        }
+
+        .flat-design .btn-group .style-btn {
+            padding: 0.75rem 1.5rem;
+            background: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .flat-design .demo-input {
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+        }
+
+        .flat-design .style-info {
+            background: #f5f5f5;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .flat-design .style-info p,
+        .flat-design .style-info li {
+            color: #757575;
+        }
+
+        /* 玻璃拟态 */
+        .glassmorphism body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+        }
+
+        .glassmorphism .style-btn {
+            font-family: 'SF Pro Display', sans-serif;
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .glassmorphism .style-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .glassmorphism .style-btn.active {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .glassmorphism .demo-section {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 32px rgba(31,38,135,0.37);
+        }
+
+        .glassmorphism .section-title {
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .glassmorphism .component-group {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .glassmorphism .demo-card {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+        }
+
+        .glassmorphism .demo-card p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .glassmorphism .color-swatch {
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .glassmorphism .btn-group .style-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .glassmorphism .demo-input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #ffffff;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        .glassmorphism .style-info {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+        }
+
+        .glassmorphism .style-info p,
+        .glassmorphism .style-info li {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* 新拟态 */
+        .neumorphism body {
+            font-family: 'Nunito', sans-serif;
+            background: #e0e5ec;
+            color: #2d3436;
+        }
+
+        .neumorphism .style-btn {
+            font-family: 'Nunito', sans-serif;
+            background: #e0e5ec;
+            color: #6c5ce7;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+        }
+
+        .neumorphism .style-btn:hover {
+            box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
+        }
+
+        .neumorphism .style-btn.active {
+            background: #e0e5ec;
+            color: #6c5ce7;
+            box-shadow: inset 6px 6px 12px #a3b1c6, inset -6px -6px 12px #ffffff;
+        }
+
+        .neumorphism .demo-section {
+            background: #e0e5ec;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
+        }
+
+        .neumorphism .section-title {
+            border-bottom: none;
+        }
+
+        .neumorphism .component-group {
+            background: #e0e5ec;
+            border: none;
+            border-radius: 16px;
+            box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+        }
+
+        .neumorphism .demo-card {
+            background: #e0e5ec;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+        }
+
+        .neumorphism .demo-card p {
+            color: #636e72;
+        }
+
+        .neumorphism .color-swatch {
+            border-radius: 12px;
+            box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff;
+        }
+
+        .neumorphism .btn-group .style-btn {
+            padding: 0.75rem 1.5rem;
+            background: #e0e5ec;
+            color: #6c5ce7;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+        }
+
+        .neumorphism .demo-input {
+            background: #e0e5ec;
+            border: none;
+            color: #2d3436;
+            border-radius: 12px;
+            box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+        }
+
+        .neumorphism .style-info {
+            background: #e0e5ec;
+            border: none;
+            border-radius: 16px;
+            box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+        }
+
+        .neumorphism .style-info p,
+        .neumorphism .style-info li {
+            color: #636e72;
+        }
+
+        /* 赛博朋克 */
+        .cyberpunk body {
+            font-family: 'Orbitron', monospace;
+            background: #0a0a0a;
+            color: #e8e8e8;
+        }
+
+        .cyberpunk .style-btn {
+            font-family: 'Orbitron', monospace;
+            background: transparent;
+            color: #00ff41;
+            border: 2px solid #00ff41;
+            border-radius: 0;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px #00ff41;
+        }
+
+        .cyberpunk .style-btn:hover {
+            background: #00ff41;
+            color: #000000;
+            box-shadow: 0 0 20px #00ff41;
+        }
+
+        .cyberpunk .style-btn.active {
+            background: #00ff41;
+            color: #000000;
+            box-shadow: 0 0 20px #00ff41;
+        }
+
+        .cyberpunk .demo-section {
+            background: #1a1a1a;
+            border: 1px solid #404040;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0,255,65,0.1);
+        }
+
+        .cyberpunk .section-title {
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 2px solid #00ff41;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .cyberpunk .component-group {
+            background: #1a1a1a;
+            border: 1px solid #404040;
+            border-radius: 4px;
+        }
+
+        .cyberpunk .demo-card {
+            background: #1a1a1a;
+            border: 1px solid #404040;
+            border-radius: 4px;
+        }
+
+        .cyberpunk .demo-card h3 {
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .cyberpunk .demo-card p {
+            color: #808080;
+        }
+
+        .cyberpunk .color-swatch {
+            border-radius: 0;
+            border: 1px solid #404040;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .cyberpunk .btn-group .style-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            color: #00ff41;
+            border: 2px solid #00ff41;
+            border-radius: 0;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px #00ff41;
+        }
+
+        .cyberpunk .demo-input {
+            background: #0a0a0a;
+            border: 1px solid #404040;
+            color: #00ff41;
+            border-radius: 0;
+            text-shadow: 0 0 5px #00ff41;
+        }
+
+        .cyberpunk .style-info {
+            background: #1a1a1a;
+            border: 1px solid #404040;
+            border-radius: 4px;
+        }
+
+        .cyberpunk .style-info h2 {
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .cyberpunk .style-info p,
+        .cyberpunk .style-info li {
+            color: #808080;
+        }
+
+        /* 复古未来主义 */
+        .retro-futurism body {
+            font-family: 'Press Start 2P', cursive;
+            background: #1a1a2e;
+            color: #ffffff;
+        }
+
+        .retro-futurism .style-btn {
+            font-family: 'Press Start 2P', cursive;
+            background: transparent;
+            color: #ff6b6b;
+            border: 3px solid #ff6b6b;
+            border-radius: 0;
+            font-size: 0.65rem;
+        }
+
+        .retro-futurism .style-btn:hover {
+            background: #ff6b6b;
+            color: #ffffff;
+        }
+
+        .retro-futurism .style-btn.active {
+            background: #ff6b6b;
+            color: #ffffff;
+        }
+
+        .retro-futurism .demo-section {
+            background: #16213e;
+            border: 3px solid #636e72;
+            border-radius: 0;
+            box-shadow: 4px 4px 0 #636e72;
+        }
+
+        .retro-futurism .section-title {
+            border-bottom: none;
+        }
+
+        .retro-futurism .component-group {
+            background: #16213e;
+            border: 3px solid #636e72;
+            border-radius: 0;
+        }
+
+        .retro-futurism .demo-card {
+            background: #16213e;
+            border: 3px solid #636e72;
+            border-radius: 0;
+            box-shadow: 4px 4px 0 #636e72;
+        }
+
+        .retro-futurism .demo-card h3 {
+            font-size: 1rem;
+        }
+
+        .retro-futurism .demo-card p {
+            color: #b2bec3;
+            font-size: 0.75rem;
+        }
+
+        .retro-futurism .color-swatch {
+            border-radius: 0;
+            border: 3px solid #636e72;
+        }
+
+        .retro-futurism .btn-group .style-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            color: #ff6b6b;
+            border: 3px solid #ff6b6b;
+            border-radius: 0;
+            font-size: 0.65rem;
+        }
+
+        .retro-futurism .demo-input {
+            background: #1a1a2e;
+            border: 3px solid #636e72;
+            color: #ffffff;
+            border-radius: 0;
+            font-size: 0.75rem;
+        }
+
+        .retro-futurism .style-info {
+            background: #16213e;
+            border: 3px solid #636e72;
+            border-radius: 0;
+            box-shadow: 4px 4px 0 #636e72;
+        }
+
+        .retro-futurism .style-info h2 {
+            font-size: 1.25rem;
+        }
+
+        .retro-futurism .style-info p,
+        .retro-futurism .style-info li {
+            color: #b2bec3;
+            font-size: 0.75rem;
+        }
+
+        /* 包豪斯 */
+        .bauhaus body {
+            font-family: 'Futura', 'Helvetica', sans-serif;
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .bauhaus .style-btn {
+            font-family: 'Futura', sans-serif;
+            background: #e31c25;
+            color: #ffffff;
+            border: none;
+            border-radius: 0;
+            text-transform: uppercase;
+        }
+
+        .bauhaus .style-btn:hover {
+            background: #c41e3a;
+        }
+
+        .bauhaus .style-btn.active {
+            background: #000000;
+        }
+
+        .bauhaus .demo-section {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .bauhaus .section-title {
+            border-bottom: 2px solid #000000;
+        }
+
+        .bauhaus .component-group {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 0;
+        }
+
+        .bauhaus .demo-card {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 0;
+        }
+
+        .bauhaus .demo-card h3 {
+            text-transform: uppercase;
+        }
+
+        .bauhaus .demo-card p {
+            color: #616161;
+        }
+
+        .bauhaus .color-swatch {
+            border-radius: 0;
+            border: 2px solid #000000;
+        }
+
+        .bauhaus .btn-group .style-btn {
+            padding: 1rem 2rem;
+            background: #e31c25;
+            color: #ffffff;
+            border: none;
+            border-radius: 0;
+            text-transform: uppercase;
+        }
+
+        .bauhaus .demo-input {
+            background: #ffffff;
+            border: 2px solid #000000;
+            color: #000000;
+            border-radius: 0;
+        }
+
+        .bauhaus .style-info {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 0;
+        }
+
+        .bauhaus .style-info p,
+        .bauhaus .style-info li {
+            color: #616161;
+        }
+
+        /* 有机设计 */
+        .organic body {
+            font-family: 'Quicksand', sans-serif;
+            background: #faf8f5;
+            color: #2d3436;
+        }
+
+        .organic .style-btn {
+            font-family: 'Quicksand', sans-serif;
+            background: #2d6a4f;
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+        }
+
+        .organic .style-btn:hover {
+            background: #1b4332;
+        }
+
+        .organic .style-btn.active {
+            background: #74c69d;
+        }
+
+        .organic .demo-section {
+            background: #ffffff;
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .organic .section-title {
+            border-bottom: none;
+        }
+
+        .organic .component-group {
+            background: #f5f5f5;
+            border: none;
+            border-radius: 16px;
+        }
+
+        .organic .demo-card {
+            background: #ffffff;
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .organic .demo-card p {
+            color: #636e72;
+        }
+
+        .organic .color-swatch {
+            border-radius: 50px;
+        }
+
+        .organic .btn-group .style-btn {
+            padding: 0.75rem 1.5rem;
+            background: #2d6a4f;
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+        }
+
+        .organic .demo-input {
+            background: #faf8f5;
+            border: 2px solid #e6dfda;
+            color: #2d3436;
+            border-radius: 16px;
+        }
+
+        .organic .style-info {
+            background: #f5f5f5;
+            border: none;
+            border-radius: 16px;
+        }
+
+        .organic .style-info p,
+        .organic .style-info li {
+            color: #636e72;
+        }
+
+        /* 粗野主义 */
+        .brutalism body {
+            font-family: 'Space Mono', monospace;
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .brutalism .style-btn {
+            font-family: 'Space Mono', monospace;
+            background: #ffffff;
+            color: #ff0000;
+            border: 4px solid #ff0000;
+            border-radius: 0;
+            text-transform: uppercase;
+        }
+
+        .brutalism .style-btn:hover {
+            background: #ff0000;
+            color: #ffffff;
+        }
+
+        .brutalism .style-btn.active {
+            background: #ff0000;
+            color: #ffffff;
+        }
+
+        .brutalism .demo-section {
+            background: #ffffff;
+            border: 4px solid #000000;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .brutalism .section-title {
+            border-bottom: 4px solid #000000;
+        }
+
+        .brutalism .component-group {
+            background: #ffffff;
+            border: 4px solid #000000;
+            border-radius: 0;
+        }
+
+        .brutalism .demo-card {
+            background: #ffffff;
+            border: 4px solid #000000;
+            border-radius: 0;
+        }
+
+        .brutalism .demo-card h3 {
+            text-transform: uppercase;
+        }
+
+        .brutalism .demo-card p {
+            color: #808080;
+        }
+
+        .brutalism .color-swatch {
+            border-radius: 0;
+            border: 4px solid #000000;
+        }
+
+        .brutalism .btn-group .style-btn {
+            padding: 1rem 2rem;
+            background: #ffffff;
+            color: #ff0000;
+            border: 4px solid #ff0000;
+            border-radius: 0;
+            text-transform: uppercase;
+        }
+
+        .brutalism .demo-input {
+            background: #ffffff;
+            border: 4px solid #000000;
+            color: #000000;
+            border-radius: 0;
+        }
+
+        .brutalism .style-info {
+            background: #ffffff;
+            border: 4px solid #000000;
+            border-radius: 0;
+        }
+
+        .brutalism .style-info p,
+        .brutalism .style-info li {
+            color: #808080;
+        }
+
+        /* Material Design */
+        .material-design body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f5f5;
+            color: #212121;
+        }
+
+        .material-design .style-btn {
+            font-family: 'Roboto', sans-serif;
+            background: #6200ea;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .material-design .style-btn:hover {
+            background: #7c4dff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .material-design .style-btn.active {
+            background: #0a00b6;
+        }
+
+        .material-design .demo-section {
+            background: #ffffff;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .material-design .section-title {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .material-design .component-group {
+            background: #f5f5f5;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .material-design .demo-card {
+            background: #ffffff;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .material-design .demo-card p {
+            color: #757575;
+        }
+
+        .material-design .color-swatch {
+            border-radius: 4px;
+        }
+
+        .material-design .btn-group .style-btn {
+            padding: 0.75rem 1.5rem;
+            background: #6200ea;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .material-design .demo-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #bdbdbd;
+            color: #212121;
+            border-radius: 0;
+        }
+
+        .material-design .style-info {
+            background: #f5f5f5;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .material-design .style-info p,
+        .material-design .style-info li {
+            color: #757575;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>设计规范演示</h1>
+            <p>Design Systems Showcase - 点击下方按钮切换不同的设计风格</p>
+        </header>
+
+        <div class="style-selector">
+            <button class="style-btn active" data-style="industrial">工业实用主义</button>
+            <button class="style-btn" data-style="minimalism">极简主义</button>
+            <button class="style-btn" data-style="flat-design">扁平化设计</button>
+            <button class="style-btn" data-style="glassmorphism">玻璃拟态</button>
+            <button class="style-btn" data-style="neumorphism">新拟态</button>
+            <button class="style-btn" data-style="cyberpunk">赛博朋克</button>
+            <button class="style-btn" data-style="retro-futurism">复古未来主义</button>
+            <button class="style-btn" data-style="bauhaus">包豪斯</button>
+            <button class="style-btn" data-style="organic">有机设计</button>
+            <button class="style-btn" data-style="brutalism">粗野主义</button>
+            <button class="style-btn" data-style="material-design">Material Design</button>
+        </div>
+
+        <div class="style-info">
+            <h2 id="styleTitle">工业实用主义</h2>
+            <p id="styleDescription">极简、高效、清晰、专业的设计风格，强调功能性和可读性。</p>
+            <ul id="styleFeatures">
+                <li>单色系配色，避免鲜艳色彩</li>
+                <li>等宽字体营造技术感和专业感</li>
+                <li>大写字母和字母间距</li>
+                <li>极简边框和分隔线</li>
+                <li>无阴影、无渐变、无圆角</li>
+                <li>快速过渡动画</li>
+            </ul>
+        </div>
+
+        <div class="demo-section">
+            <h2 class="section-title">组件展示</h2>
+            <div class="components-grid">
+                <div class="component-group">
+                    <div class="component-label">按钮</div>
+                    <div class="btn-group">
+                        <button class="style-btn">主要按钮</button>
+                        <button class="style-btn">次要按钮</button>
+                        <button class="style-btn">禁用状态</button>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">输入框</div>
+                    <input type="text" class="demo-input" placeholder="输入文本...">
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">卡片</div>
+                    <div class="demo-card">
+                        <h3>卡片标题</h3>
+                        <p>这是一个示例卡片，展示了当前设计风格的排版和间距。</p>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">色彩系统</div>
+                    <div class="color-palette" id="colorPalette">
+                        <div class="color-swatch" style="background: #0d0d0d;">#0d0d0d</div>
+                        <div class="color-swatch" style="background: #1a1a1a;">#1a1a1a</div>
+                        <div class="color-swatch" style="background: #333;">#333</div>
+                        <div class="color-swatch" style="background: #666;">#666</div>
+                        <div class="color-swatch" style="background: #e8e8e8; color: #333;">#e8e8e8</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const styleData = {
+            'industrial': {
+                title: '工业实用主义',
+                description: '极简、高效、清晰、专业的设计风格，强调功能性和可读性。',
+                features: [
+                    '单色系配色，避免鲜艳色彩',
+                    '等宽字体营造技术感和专业感',
+                    '大写字母和字母间距',
+                    '极简边框和分隔线',
+                    '无阴影、无渐变、无圆角',
+                    '快速过渡动画'
+                ],
+                colors: ['#0d0d0d', '#1a1a1a', '#333', '#666', '#e8e8e8']
+            },
+            'minimalism': {
+                title: '极简主义',
+                description: '少即是多，留白、简洁、本质的设计风格。',
+                features: [
+                    '大量留白创造呼吸感',
+                    '单色系配色，黑白灰为主',
+                    '简洁线条和几何形状',
+                    '去除所有装饰元素',
+                    '清晰层级，大小粗细颜色',
+                    '功能性优先'
+                ],
+                colors: ['#000000', '#333333', '#666666', '#999999', '#e5e5e5']
+            },
+            'flat-design': {
+                title: '扁平化设计',
+                description: '二维、简洁、鲜明、现代的设计风格。',
+                features: [
+                    '无阴影或极简阴影',
+                    '鲜艳色彩，高饱和度',
+                    '简洁图标，矢量图形',
+                    '无渐变效果',
+                    '扁平形状，几何图形',
+                    '清晰排版'
+                ],
+                colors: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6']
+            },
+            'glassmorphism': {
+                title: '玻璃拟态',
+                description: '透明、模糊、深度、光影的设计风格。',
+                features: [
+                    '毛玻璃效果，backdrop-filter',
+                    '半透明背景',
+                    '柔和阴影创造深度',
+                    '渐变色彩',
+                    '大圆角创造柔和感',
+                    '层次分明'
+                ],
+                colors: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe']
+            },
+            'neumorphism': {
+                title: '新拟态',
+                description: '柔和、凸起、凹陷、光影的设计风格。',
+                features: [
+                    '双重阴影创造凸起凹陷',
+                    '柔和色彩，低对比度',
+                    '统一背景色',
+                    '柔和圆角',
+                    '触感设计，模拟物理按钮',
+                    '深度感，光影创造真实感'
+                ],
+                colors: ['#6c5ce7', '#00b894', '#fd79a8', '#e0e5ec', '#a3b1c6']
+            },
+            'cyberpunk': {
+                title: '赛博朋克',
+                description: '未来、科技、霓虹、反乌托邦的设计风格。',
+                features: [
+                    '霓虹色彩，高饱和度',
+                    '黑暗背景突出霓虹效果',
+                    '几何形状，锐利线条',
+                    '发光效果，霓虹光晕',
+                    '科技元素和符号',
+                    '强烈对比'
+                ],
+                colors: ['#00ff41', '#ff00ff', '#00ffff', '#ffff00', '#9d00ff']
+            },
+            'retro-futurism': {
+                title: '复古未来主义',
+                description: '复古、未来、怀旧、想象的设计风格。',
+                features: [
+                    '像素字体，像素艺术',
+                    '80-90年代复古色彩',
+                    '硬边阴影',
+                    '简单几何形状',
+                    '结合复古和未来元素',
+                    '怀旧情怀'
+                ],
+                colors: ['#ff6b6b', '#4ecdc4', '#ffe66d', '#a55eea', '#26de81']
+            },
+            'bauhaus': {
+                title: '包豪斯',
+                description: '功能、形式追随功能、几何、原色的设计风格。',
+                features: [
+                    '几何形状，圆方三角',
+                    '三原色，红蓝黄',
+                    '黑白对比',
+                    '无装饰设计',
+                    '功能决定形式',
+                    '网格系统'
+                ],
+                colors: ['#e31c25', '#005eb8', '#fecb00', '#000000', '#ffffff']
+            },
+            'organic': {
+                title: '有机设计',
+                description: '自然、流动、柔和、和谐的设计风格。',
+                features: [
+                    '自然色彩',
+                    '柔和圆角',
+                    '流动形状，有机曲线',
+                    '柔和阴影',
+                    '自然纹理元素',
+                    '和谐配色'
+                ],
+                colors: ['#2d6a4f', '#74c69d', '#95d5b2', '#d8f3dc', '#8b4513']
+            },
+            'brutalism': {
+                title: '粗野主义',
+                description: '原始、诚实、大胆、反常规的设计风格。',
+                features: [
+                    '高对比度色彩',
+                    '粗边框',
+                    '无圆角',
+                    '等宽字体',
+                    '原始设计，诚实',
+                    '反常规，打破原则'
+                ],
+                colors: ['#ff0000', '#0000ff', '#ffff00', '#00ff00', '#ff00ff']
+            },
+            'material-design': {
+                title: 'Material Design',
+                description: '材料、层次、动效、自适应的设计风格。',
+                features: [
+                    '材料隐喻，模拟真实质感',
+                    '层次分明，阴影高度',
+                    '涟漪效果',
+                    '流畅动效',
+                    '自适应设计',
+                    '卡片布局'
+                ],
+                colors: ['#6200ea', '#03dac6', '#ff4081', '#00bcd4', '#4caf50']
+            }
+        };
+
+        const styleBtns = document.querySelectorAll('.style-btn');
+        const body = document.body;
+        const styleTitle = document.getElementById('styleTitle');
+        const styleDescription = document.getElementById('styleDescription');
+        const styleFeatures = document.getElementById('styleFeatures');
+        const colorPalette = document.getElementById('colorPalette');
+
+        styleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const style = btn.dataset.style;
+                
+                styleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                body.className = style;
+                
+                const data = styleData[style];
+                styleTitle.textContent = data.title;
+                styleDescription.textContent = data.description;
+                styleFeatures.innerHTML = data.features.map(f => `<li>${f}</li>`).join('');
+                
+                colorPalette.innerHTML = data.colors.map((color, index) => {
+                    const textColor = index === 4 ? '#333' : '#ffffff';
+                    return `<div class="color-swatch" style="background: ${color}; color: ${textColor};">${color}</div>`;
+                }).join('');
+            });
+        });
+    </script>
+</body>
+</html>

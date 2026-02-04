@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微交互设计示例</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #6366f1;
+            --color-primary-light: #818cf8;
+            --color-primary-dark: #4f46e5;
+
+            --color-bg-main: #ffffff;
+            --color-bg-secondary: #f9fafb;
+            --color-bg-card: #ffffff;
+            --color-bg-hover: #f3f4f6;
+
+            --color-text-main: #111827;
+            --color-text-secondary: #6b7280;
+            --color-text-disabled: #9ca3af;
+
+            --color-border-main: #e5e7eb;
+            --color-border-secondary: #d1d5db;
+
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --spacing-3xl: 4rem;
+
+            --border-radius-sm: 0.5rem;
+            --border-radius-md: 0.75rem;
+            --border-radius-lg: 1rem;
+
+            --transition-duration-fast: 150ms;
+            --transition-duration-normal: 250ms;
+            --transition-duration-slow: 400ms;
+            --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--color-bg-main);
+            color: var(--color-text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .btn {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .input {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+
+        header {
+            text-align: center;
+            padding: var(--spacing-3xl) 0;
+            margin-bottom: var(--spacing-2xl);
+            background: var(--color-primary);
+            color: white;
+            margin: calc(var(--spacing-lg) * -1);
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-3xl) var(--spacing-lg);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .grid {
+            display: grid;
+            gap: var(--spacing-lg);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .card {
+            background: var(--color-bg-card);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            border: 1px solid var(--color-border-main);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition-duration-normal) var(--transition-timing);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--color-primary);
+            opacity: 0;
+            transition: opacity var(--transition-duration-normal) var(--transition-timing);
+            z-index: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+        }
+
+        .card:hover::before {
+            opacity: 0.05;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            position: relative;
+            z-index: 1;
+            transition: color var(--transition-duration-fast) var(--transition-timing);
+        }
+
+        .card:hover .card-title {
+            color: var(--color-primary);
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--color-primary);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.75rem;
+            color: white;
+            font-weight: 500;
+            transition: transform var(--transition-duration-fast) var(--transition-timing);
+        }
+
+        .card:hover .tag {
+            transform: scale(1.05);
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--transition-duration-normal) var(--transition-timing);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--color-bg-secondary);
+            color: var(--color-text-main);
+            border: 2px solid var(--color-border-main);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.8125rem;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+
+        .input {
+            background: var(--color-bg-secondary);
+            color: var(--color-text-main);
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius-md);
+            border: 2px solid var(--color-border-main);
+            font-size: 1rem;
+            width: 100%;
+            transition: all var(--transition-duration-fast) var(--transition-timing);
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .input::placeholder {
+            color: var(--color-text-disabled);
+            transition: color var(--transition-duration-fast) var(--transition-timing);
+        }
+
+        .input:focus::placeholder {
+            color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-text-secondary);
+            transition: color var(--transition-duration-fast) var(--transition-timing);
+        }
+
+        .input:focus + .form-label,
+        .input:focus ~ .form-label {
+            color: var(--color-primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-lg);
+        }
+
+        .stat-card {
+            background: var(--color-bg-card);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            text-align: center;
+            border: 1px solid var(--color-border-main);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition-duration-normal) var(--transition-timing);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-xs);
+            transition: transform var(--transition-duration-fast) var(--transition-timing);
+        }
+
+        .stat-card:hover .stat-value {
+            transform: scale(1.1);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .progress-bar {
+            height: 0.5rem;
+            background: var(--color-bg-hover);
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+            margin-top: var(--spacing-sm);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--color-primary);
+            border-radius: var(--border-radius-sm);
+            transition: width var(--transition-duration-slow) var(--transition-timing);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--spacing-md);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>微交互设计</h1>
+        <p class="subtitle">Micro-interactions Design System</p>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2 class="section-title">统计数据</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">2.4K</div>
+                    <div class="stat-label">活跃用户</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">89%</div>
+                    <div class="stat-label">满意度</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">项目数量</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.8</div>
+                    <div class="stat-label">平均评分</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">功能卡片</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">智能分析</div>
+                    <div class="card-description">基于AI的数据分析引擎，提供实时洞察和预测。</div>
+                    <div class="card-meta">
+                        <span class="tag">AI</span>
+                        <span class="tag">分析</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">实时监控</div>
+                    <div class="card-description">24/7系统监控，自动告警和故障恢复。</div>
+                    <div class="card-meta">
+                        <span class="tag">监控</span>
+                        <span class="tag">自动化</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">数据可视化</div>
+                    <div class="card-description">丰富的图表类型，支持自定义仪表板。</div>
+                    <div class="card-meta">
+                        <span class="tag">可视化</span>
+                        <span class="tag">图表</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">按钮样式</h2>
+            <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap; align-items: center;">
+                <button class="btn btn-primary">主要按钮</button>
+                <button class="btn btn-secondary">次要按钮</button>
+                <button class="btn btn-primary btn-small">小号按钮</button>
+                <button class="btn btn-primary btn-large">大号按钮</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">表单组件</h2>
+            <div class="card">
+                <div class="form-group">
+                    <label class="form-label">项目名称</label>
+                    <input type="text" class="input" placeholder="输入项目名称...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">项目描述</label>
+                    <input type="text" class="input" placeholder="输入项目描述...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">完成进度</label>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: var(--spacing-sm);">
+                    <button class="btn btn-primary">保存项目</button>
+                    <button class="btn btn-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

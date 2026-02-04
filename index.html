@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计规范索引 - 96个设计风格</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-card: #ffffff;
+            --bg-hover: #f0f0f0;
+            --text-primary: #0d0d0d;
+            --text-secondary: #666666;
+            --text-tertiary: #999999;
+            --border-primary: #e0e0e0;
+            --border-secondary: #d0d0d0;
+            --accent: #0d0d0d;
+            --accent-hover: #1a1a1a;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #1a1a1a;
+            --bg-hover: #252525;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --text-tertiary: #707070;
+            --border-primary: #333333;
+            --border-secondary: #404040;
+            --accent: #e8e8e8;
+            --accent-hover: #ffffff;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-primary);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-secondary);
+        }
+
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-primary);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .header-actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 2px solid var(--border-primary);
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .header-actions a:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .header-actions a.primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .header-actions a.primary:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+
+        .header-actions svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .search-section {
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            font-size: 0.875rem;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            border: 2px solid var(--border-primary);
+            border-radius: 4px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.2s;
+            outline: none;
+            letter-spacing: 0.05em;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(13, 13, 13, 0.1);
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: var(--text-tertiary);
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-primary);
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .filter-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-secondary);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .category {
+            margin-bottom: 30px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-primary);
+        }
+
+        .category-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .category-count {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 4px 12px;
+            border: 2px solid var(--border-primary);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--border-secondary);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            z-index: 10;
+        }
+
+        .preview-container {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            background: var(--bg-secondary);
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .preview {
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .preview-container.preview-loaded .preview {
+            opacity: 1;
+        }
+
+        .preview-container.preview-error .preview {
+            display: none;
+        }
+
+        .preview-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            z-index: 1;
+        }
+
+        .preview-container.preview-loaded .preview-loading {
+            display: none;
+        }
+
+        .preview-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 16px;
+            z-index: 1;
+        }
+
+        .preview-container:not(.preview-error) .preview-error {
+            display: none;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.3;
+            letter-spacing: 0.05em;
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            letter-spacing: 0.02em;
+        }
+
+        .card-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 2px solid var(--border-primary);
+            border-radius: 4px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .card-link:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .card-link svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .stats-section {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 16px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            border-top: 2px solid var(--border-primary);
+            margin-top: 60px;
+            font-size: 0.875rem;
+        }
+
+        footer p {
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
+        }
+
+        footer a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-primary);
+            transition: all 0.2s;
+        }
+
+        footer a:hover {
+            border-color: var(--accent);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .no-results svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+            fill: var(--text-tertiary);
+        }
+
+        .no-results h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .no-results p {
+            font-size: 0.875rem;
+            letter-spacing: 0.02em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-top {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .header-actions {
+                flex-direction: column;
+            }
+
+            .header-actions a {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                gap: 6px;
+            }
+
+            .filter-btn {
+                padding: 6px 16px;
+                font-size: 0.8125rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <div></div>
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+                    <svg id="themeIcon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                    <span id="themeText">暗黑</span>
+                </button>
+            </div>
+            <h1>设计规范索引</h1>
+            <p>96个设计规范，涵盖从极简主义到赛博朋克的多种风格</p>
+            <div class="header-actions">
+                <a href="docs/USER-GUIDE.md">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    使用指南
+                </a>
+                <a href="design-resources.html">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                    设计资源
+                </a>
+            </div>
+        </header>
+
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">96</div>
+                    <div class="stat-label">设计规范</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">设计类别</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" id="searchInput" placeholder="搜索设计规范..." oninput="filterDesignSystems()">
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">全部</button>
+            <button class="filter-btn" data-filter="minimal" onclick="setFilter('minimal')">极简</button>
+            <button class="filter-btn" data-filter="modern" onclick="setFilter('modern')">现代</button>
+            <button class="filter-btn" data-filter="retro" onclick="setFilter('retro')">复古</button>
+            <button class="filter-btn" data-filter="tech" onclick="setFilter('tech')">科技</button>
+            <button class="filter-btn" data-filter="art" onclick="setFilter('art')">艺术</button>
+        </div>
+
+        <div id="categoriesContainer">
+        </div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <h3>未找到匹配的设计规范</h3>
+            <p>尝试调整搜索关键词或筛选条件</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 由 Ash 创建和维护</p>
+        <p>📮：aramisjiang@gmail.com</p>
+    </footer>
+
+    <script>
+        const designSystems = [
+            { id: '01', name: '工业实用主义', desc: '强调功能性、清晰度和可用性，去除一切不必要的装饰', folder: 'design-systems/01-industrial-utilitarianism', category: 'minimal' },
+            { id: '02', name: '极简主义', desc: '少即是多，通过简洁的设计传达核心信息', folder: 'design-systems/02-minimalism', category: 'minimal' },
+            { id: '03', name: '扁平化设计', desc: '去除三维效果，使用简洁的形状和鲜明的色彩', folder: 'design-systems/03-flat-design', category: 'modern' },
+            { id: '04', name: '玻璃态设计', desc: '使用透明、模糊和半透明效果创造层次感', folder: 'design-systems/04-glassmorphism', category: 'modern' },
+            { id: '05', name: '新拟态设计', desc: '通过光影效果创造凸起和凹陷的触感', folder: 'design-systems/05-neumorphism', category: 'modern' },
+            { id: '06', name: '赛博朋克', desc: '霓虹色彩、科技感和反乌托邦美学', folder: 'design-systems/06-cyberpunk', category: 'tech' },
+            { id: '07', name: '复古未来主义', desc: '融合复古元素与未来科技感的独特美学', folder: 'design-systems/07-retro-futurism', category: 'retro' },
+            { id: '08', name: '包豪斯风格', desc: '几何形状、功能主义和艺术与技术的统一', folder: 'design-systems/08-bauhaus', category: 'art' },
+            { id: '09', name: '有机设计', desc: '自然形态、流畅曲线和有机纹理', folder: 'design-systems/09-organic', category: 'art' },
+            { id: '10', name: '野兽派设计', desc: '粗犷、原始、反常规的视觉冲击', folder: 'design-systems/10-brutalism', category: 'art' },
+            { id: '11', name: 'Material Design', desc: 'Google 的设计语言，基于纸张和墨水的隐喻', folder: 'design-systems/11-material-design', category: 'modern' },
+            { id: '12', name: '装饰艺术', desc: '几何装饰、对称布局和奢华材质', folder: 'design-systems/12-art-deco', category: 'retro' },
+            { id: '13', name: '后现代主义', desc: '打破传统规则，融合多种风格和元素', folder: 'design-systems/13-postmodernism', category: 'art' },
+            { id: '14', name: '国际主义风格', desc: '网格系统、无衬线字体和理性布局', folder: 'design-systems/14-international-style', category: 'minimal' },
+            { id: '15', name: '极繁主义', desc: '更多即更好，丰富的色彩和装饰元素', folder: 'design-systems/15-maximalism', category: 'art' },
+            { id: '16', name: '复古像素风', desc: '8位和16位游戏的像素艺术美学', folder: 'design-systems/16-retro-pixel', category: 'retro' },
+            { id: '17', name: '手绘风格', desc: '手绘插画、涂鸦和个性化表达', folder: 'design-systems/17-hand-drawn', category: 'art' },
+            { id: '18', name: '复古波普', desc: '流行艺术、鲜艳色彩和大众文化元素', folder: 'design-systems/18-retro-pop', category: 'retro' },
+            { id: '19', name: '未来主义', desc: '速度、科技和动态感的视觉表达', folder: 'design-systems/19-futurism', category: 'tech' },
+            { id: '20', name: '瑞士风格', desc: '无衬线字体、不对称布局和网格系统', folder: 'design-systems/20-swiss-style', category: 'minimal' },
+            { id: '21', name: '毛玻璃效果', desc: '背景模糊、半透明和层次感设计', folder: 'design-systems/21-frosted-glass', category: 'modern' },
+            { id: '22', name: '便当盒布局', desc: '网格化卡片布局，模块化内容组织', folder: 'design-systems/22-bento-box', category: 'modern' },
+            { id: '23', name: '暗黑模式', desc: '深色背景、高对比度和护眼设计', folder: 'design-systems/23-dark-mode', category: 'modern' },
+            { id: '24', name: '渐变设计', desc: '流畅的色彩过渡和视觉深度', folder: 'design-systems/24-gradient-design', category: 'modern' },
+            { id: '25', name: '3D 设计', desc: '三维元素、深度和立体感', folder: 'design-systems/25-3d-design', category: 'tech' },
+            { id: '26', name: '微交互', desc: '细微的动画和交互反馈', folder: 'design-systems/26-micro-interactions', category: 'modern' },
+            { id: '27', name: '拟物化', desc: '模仿现实世界的材质和纹理', folder: 'design-systems/27-skeuomorphism', category: 'retro' },
+            { id: '28', name: '流体设计', desc: '流动的形状、有机形态和动态感', folder: 'design-systems/28-liquid-design', category: 'art' },
+            { id: '29', name: '几何抽象', desc: '几何形状、抽象构图和数学美感', folder: 'design-systems/29-geometric-abstract', category: 'art' },
+            { id: '30', name: '线框设计', desc: '极简线条、透明背景和结构化布局', folder: 'design-systems/30-wireframe-design', category: 'minimal' },
+            { id: '31', name: '模糊设计', desc: '背景模糊、视觉层次和柔和效果', folder: 'design-systems/31-blur-design', category: 'modern' },
+            { id: '32', name: '霓虹设计', desc: '霓虹灯效果、发光元素和夜店美学', folder: 'design-systems/32-neon-design', category: 'tech' },
+            { id: '33', name: '蒸汽波', desc: '80年代美学、复古科技和迷幻色彩', folder: 'design-systems/33-vaporwave', category: 'retro' },
+            { id: '34', name: '故障艺术', desc: '数字故障、失真效果和错误美学', folder: 'design-systems/34-glitch-art', category: 'tech' },
+            { id: '35', name: '极光设计', desc: '极光色彩、渐变和自然光效', folder: 'design-systems/35-aurora-design', category: 'art' },
+            { id: '36', name: '水墨风格', desc: '中国传统水墨画、留白和意境', folder: 'design-systems/36-ink-wash-style', category: 'art' },
+            { id: '37', name: '像素艺术', desc: '像素化图形、复古游戏和数字艺术', folder: 'design-systems/37-pixel-art', category: 'retro' },
+            { id: '38', name: '波普艺术', desc: '大众文化、鲜艳色彩和重复图案', folder: 'design-systems/38-pop-art', category: 'art' },
+            { id: '39', name: '孟菲斯设计', desc: '几何形状、鲜艳色彩和俏皮元素', folder: 'design-systems/39-memphis-design', category: 'art' },
+            { id: '40', name: '赛博格风格', desc: '人机融合、科技感和金属质感', folder: 'design-systems/40-cyborg', category: 'tech' },
+            { id: '41', name: '全息设计', desc: '全息效果、彩虹光泽和未来感', folder: 'design-systems/41-holographic-design', category: 'tech' },
+            { id: '42', name: '元宇宙风格', desc: '虚拟世界、沉浸式体验和数字身份', folder: 'design-systems/42-metaverse-style', category: 'tech' },
+            { id: '43', name: 'Apple HIG', desc: 'Apple Human Interface Guidelines 设计规范', folder: 'design-systems/43-apple-hig', category: 'modern' },
+            { id: '44', name: 'Ant Design', desc: '企业级中后台设计语言', folder: 'design-systems/44-ant-design', category: 'modern' },
+            { id: '45', name: 'Carbon Design', desc: 'IBM 的企业级设计系统', folder: 'design-systems/45-carbon-design', category: 'modern' },
+            { id: '46', name: 'Fluent Design', desc: 'Microsoft 的设计语言', folder: 'design-systems/46-fluent-design', category: 'modern' },
+            { id: '47', name: 'Bootstrap', desc: '流行的前端框架设计规范', folder: 'design-systems/47-bootstrap', category: 'modern' },
+            { id: '48', name: 'Tailwind Utility', desc: '实用优先的 CSS 框架', folder: 'design-systems/48-tailwind-utility', category: 'modern' },
+            { id: '49', name: 'Chakra UI', desc: '简单、模块化和可访问的组件库', folder: 'design-systems/49-chakra-ui', category: 'modern' },
+            { id: '50', name: 'Radix UI', desc: '无样式、可访问的组件原语', folder: 'design-systems/50-radix-ui', category: 'modern' },
+            { id: '51', name: 'Shadcn/ui', desc: '基于 Radix UI 的组件库', folder: 'design-systems/51-shadcn-ui', category: 'modern' },
+            { id: '52', name: 'DaisyUI', desc: '基于 Tailwind CSS 的组件库', folder: 'design-systems/52-daisyui', category: 'modern' },
+            { id: '53', name: 'Atlassian Design', desc: 'Atlassian 官方设计系统，团队协作工具设计规范', folder: 'design-systems/53-atlassian-design', category: 'modern' },
+            { id: '54', name: 'Shopify Polaris', desc: 'Shopify 官方设计系统，电商平台设计规范', folder: 'design-systems/54-shopify-polaris', category: 'modern' },
+            { id: '55', name: 'Salesforce Lightning', desc: 'Salesforce 官方设计系统，CRM 应用设计规范', folder: 'design-systems/55-salesforce-lightning', category: 'modern' },
+            { id: '56', name: 'GitLab Pajamas', desc: 'GitLab 官方设计系统，DevOps 工具设计规范', folder: 'design-systems/56-gitlab-pajamas', category: 'modern' },
+            { id: '57', name: 'Zendesk Garden', desc: 'Zendesk 官方设计系统，客户服务设计规范', folder: 'design-systems/57-zendesk-garden', category: 'modern' },
+            { id: '58', name: 'Uber Base', desc: 'Uber 官方设计系统，出行应用设计规范', folder: 'design-systems/58-uber-base', category: 'modern' },
+            { id: '59', name: 'Auth0 Cosmos', desc: 'Auth0 官方设计系统，身份认证设计规范', folder: 'design-systems/59-auth0-cosmos', category: 'modern' },
+            { id: '60', name: 'MongoDB Design', desc: 'MongoDB 官方设计系统，数据库工具设计规范', folder: 'design-systems/60-mongodb-design', category: 'modern' },
+            { id: '61', name: 'Mixpanel Design', desc: 'Mixpanel 官方设计系统，数据分析设计规范', folder: 'design-systems/61-mixpanel-design', category: 'modern' },
+            { id: '62', name: 'Buffer Design', desc: 'Buffer 官方设计系统，社交媒体管理设计规范', folder: 'design-systems/62-buffer-design', category: 'modern' },
+            { id: '63', name: 'Element UI', desc: '饿了么的 Vue 组件库，企业级后台设计规范', folder: 'design-systems/63-element-ui', category: 'modern' },
+            { id: '64', name: 'Vercel Design', desc: 'Vercel 官方设计系统，开发者平台设计规范', folder: 'design-systems/64-vercel-design', category: 'modern' },
+            { id: '65', name: 'Linear Design', desc: 'Linear 官方设计系统，项目管理工具设计规范', folder: 'design-systems/65-linear-design', category: 'modern' },
+            { id: '66', name: 'Notion Design', desc: 'Notion 官方设计系统，知识管理工具设计规范', folder: 'design-systems/66-notion-design', category: 'modern' },
+            { id: '67', name: 'Stripe Design', desc: 'Stripe 官方设计系统，支付平台设计规范', folder: 'design-systems/67-stripe-design', category: 'modern' },
+            { id: '68', name: 'Airbnb Design', desc: 'Airbnb 官方设计系统，住宿平台设计规范', folder: 'design-systems/68-airbnb-design', category: 'modern' },
+            { id: '69', name: 'Spotify Design', desc: 'Spotify 官方设计系统，音乐流媒体设计规范', folder: 'design-systems/69-spotify-design', category: 'modern' },
+            { id: '70', name: 'Figma Design', desc: 'Figma 官方设计系统，协作设计工具设计规范', folder: 'design-systems/70-figma-design', category: 'modern' },
+            { id: '71', name: 'Discord Design', desc: 'Discord 官方设计系统，即时通讯工具设计规范', folder: 'design-systems/71-discord-design', category: 'modern' },
+            { id: '72', name: 'Slack Design', desc: 'Slack 官方设计系统，团队协作工具设计规范', folder: 'design-systems/72-slack-design', category: 'modern' },
+            { id: '73', name: 'Framer Motion', desc: 'React 动画库，声明式动画设计规范', folder: 'design-systems/73-framer-motion', category: 'tech' },
+            { id: '74', name: 'React Spring', desc: 'React 弹簧物理动画库，流畅动画设计规范', folder: 'design-systems/74-react-spring', category: 'tech' },
+            { id: '75', name: 'Three.js', desc: 'Web 3D 图形库，三维场景设计规范', folder: 'design-systems/75-threejs', category: 'tech' },
+            { id: '76', name: 'Lottie', desc: 'Airbnb 动画库，矢量动画设计规范', folder: 'design-systems/76-lottie', category: 'tech' },
+            { id: '77', name: 'Dribbble Shots', desc: 'Dribbble 社区，设计师作品展示平台', folder: 'design-systems/77-dribbble-shots', category: 'art' },
+            { id: '78', name: 'Pinterest Design', desc: 'Pinterest 官方设计系统，图片分享平台设计规范', folder: 'design-systems/78-pinterest-design', category: 'modern' },
+            { id: '79', name: 'Canva Design', desc: 'Canva 官方设计系统，在线设计工具设计规范', folder: 'design-systems/79-canva-design', category: 'modern' },
+            { id: '80', name: 'Framer Design', desc: 'Framer 官方设计系统，交互设计工具设计规范', folder: 'design-systems/80-framer-design', category: 'modern' },
+            { id: '81', name: 'Sketch Design', desc: 'Sketch 官方设计系统，UI 设计工具设计规范', folder: 'design-systems/81-sketch-design', category: 'modern' },
+            { id: '82', name: 'InVision Design', desc: 'InVision 官方设计系统，原型设计工具设计规范', folder: 'design-systems/82-invision-design', category: 'modern' },
+            { id: '83', name: 'Adobe XD Design', desc: 'Adobe XD 官方设计系统，UI/UX 设计工具设计规范', folder: 'design-systems/83-adobe-xd-design', category: 'modern' },
+            { id: '84', name: 'Figma Community', desc: 'Figma 社区，设计资源和组件库', folder: 'design-systems/84-figma-community', category: 'art' },
+            { id: '85', name: 'UI8 Design', desc: 'UI8，高质量 UI 设计资源和模板', folder: 'design-systems/85-ui8-design', category: 'art' },
+            { id: '86', name: 'Creative Market', desc: 'Creative Market，创意设计资源和模板', folder: 'design-systems/86-creative-market', category: 'art' },
+            { id: '87', name: 'Envato Elements', desc: 'Envato Elements，丰富的设计资源和模板', folder: 'design-systems/87-envato-elements', category: 'art' },
+            { id: '88', name: 'Awwwards', desc: 'Awwwards，最佳网站设计和创意作品展示', folder: 'design-systems/88-awwwards', category: 'art' },
+            { id: '89', name: 'CSS-Tricks', desc: 'CSS-Tricks，前端设计和开发教程资源', folder: 'design-systems/89-css-tricks', category: 'tech' },
+            { id: '90', name: 'Adobe Spectrum', desc: 'Adobe Spectrum 官方设计系统，Creative Cloud 设计规范', folder: 'design-systems/90-adobe-spectrum', category: 'modern' },
+            { id: '91', name: 'GitHub Primer', desc: 'GitHub Primer 官方设计系统，开发者平台设计规范', folder: 'design-systems/91-github-primer', category: 'modern' },
+            { id: '92', name: 'Twilio Paste', desc: 'Twilio Paste 官方设计系统，通信平台设计规范', folder: 'design-systems/92-twilio-paste', category: 'modern' },
+            { id: '93', name: 'Segment Design', desc: 'Segment 官方设计系统，数据分析平台设计规范', folder: 'design-systems/93-segment-design', category: 'modern' },
+            { id: '94', name: 'Intercom Design', desc: 'Intercom 官方设计系统，客户沟通平台设计规范', folder: 'design-systems/94-intercom-design', category: 'modern' },
+            { id: '95', name: 'Help Scout Design', desc: 'Help Scout 官方设计系统，客户支持工具设计规范', folder: 'design-systems/95-help-scout-design', category: 'modern' },
+            { id: '96', name: 'Mailchimp Design', desc: 'Mailchimp 官方设计系统，邮件营销平台设计规范', folder: 'design-systems/96-mailchimp-design', category: 'modern' }
+        ];
+
+        const categories = {
+            '极简与实用': ['minimal'],
+            '现代设计': ['modern'],
+            '复古风格': ['retro'],
+            '科技未来': ['tech'],
+            '艺术风格': ['art']
+        };
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (newTheme === 'dark') {
+                themeIcon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 0 0 9-9 9 9 0 0 0-9-9 9 9 0 0 0-9 9c3.31 0 6-2.69 6-6s-2.69-6-6-6 6-2.69 6-6-2.69 6-6 6 6-2.69 6-6z"/>';
+                themeText.textContent = '亮白';
+            } else {
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+                themeText.textContent = '暗黑';
+            }
+
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (savedTheme === 'dark') {
+                themeIcon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 0 0 9-9 9 9 0 0 0-9-9 9 9 0 0 0-9 9c3.31 0 6-2.69 6-6s-2.69-6-6-6 6-2.69 6-6-2.69 6-6 6 6-2.69 6-6z"/>';
+                themeText.textContent = '亮白';
+            } else {
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+                themeText.textContent = '暗黑';
+            }
+        }
+
+        function generateCardHtml(system) {
+            return `
+                <div class="card" data-category="${system.category}" data-name="${system.name.toLowerCase()}" data-desc="${system.desc.toLowerCase()}">
+                    <div class="card-badge">${system.id}</div>
+                    <div class="preview-container">
+                        <div class="preview-loading">加载中...</div>
+                        <div class="preview-error">
+                            <svg viewBox="0 0 24 24" style="width: 32px; height: 32px; margin-bottom: 8px; fill: var(--text-tertiary);">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <div>预览加载失败</div>
+                        </div>
+                        <iframe class="preview" src="${system.folder}/example.html" loading="lazy" onload="this.parentElement.classList.add('preview-loaded')" onerror="this.parentElement.classList.add('preview-error')"></iframe>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-number">${system.id}</div>
+                        <h3 class="card-title">${system.name}</h3>
+                        <p class="card-description">${system.desc}</p>
+                        <div class="card-links">
+                            <a href="${system.folder}/README.md" class="card-link">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                文档
+                            </a>
+                            <a href="${system.folder}/example.html" class="card-link preview-link" target="_blank">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                预览
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateCategoryHtml(categoryName, categoryFilters) {
+            const filteredSystems = designSystems.filter(system => {
+                const matchesFilter = categoryFilters.includes(currentFilter === 'all' ? system.category : currentFilter);
+                const matchesSearch = currentSearch === '' || 
+                    system.name.toLowerCase().includes(currentSearch) || 
+                    system.desc.toLowerCase().includes(currentSearch);
+                return matchesFilter && matchesSearch;
+            });
+
+            if (filteredSystems.length === 0) return '';
+
+            return `
+                <div class="category">
+                    <div class="category-header">
+                        <h2 class="category-title">${categoryName}</h2>
+                        <span class="category-count">${filteredSystems.length}</span>
+                    </div>
+                    <div class="grid">
+                        ${filteredSystems.map(system => generateCardHtml(system)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoriesContainer');
+            let html = '';
+
+            for (const [categoryName, categoryFilters] of Object.entries(categories)) {
+                const categoryHtml = generateCategoryHtml(categoryName, categoryFilters);
+                if (categoryHtml) {
+                    html += categoryHtml;
+                }
+            }
+
+            container.innerHTML = html;
+
+            const noResults = document.getElementById('noResults');
+            if (container.innerHTML.trim() === '') {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                }
+            });
+
+            renderCategories();
+        }
+
+        function filterDesignSystems() {
+            currentSearch = document.getElementById('searchInput').value.toLowerCase().trim();
+            renderCategories();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            renderCategories();
+        });
+    </script>
+</body>
+</html>

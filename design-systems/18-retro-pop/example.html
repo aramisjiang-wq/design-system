@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复古波普设计示例</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Bangers', cursive;
+            background: linear-gradient(135deg, #ff4757 0%, #ffa502 50%, #3742fa 100%);
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .btn {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .input {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #fff;
+            text-shadow: 4px 4px 0 #000;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #ff6b81;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 5px solid #a55eea;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #fff;
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #ff4757;
+            border: 5px solid #3742fa;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .card-content {
+            font-size: 1rem;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: 4px solid #000;
+            background: #ffa502;
+            color: #fff;
+            font-family: 'Bangers', cursive;
+            font-size: 0.875rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 15px;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .btn-secondary {
+            background: #ff6b81;
+            border-color: #000;
+        }
+
+        .input {
+            width: 100%;
+            padding: 1rem;
+            border: 4px solid #000;
+            background: #fff;
+            color: #ff4757;
+            font-family: 'Bangers', cursive;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            box-shadow: 3px 3px 0 #000;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #a55eea;
+            background: #fff;
+        }
+
+        .input::placeholder {
+            color: #ccc;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            vertical-align: top;
+            border: 4px solid #000;
+            border-radius: 15px;
+        }
+
+        .color-label {
+            font-size: 0.75rem;
+            color: #fff;
+            display: block;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: #fff;
+            text-shadow: 4px 4px 0 #000;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #fff;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .list-item {
+            padding: 1rem;
+            background: #2ed573;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            border: 4px solid #000;
+            border-radius: 15px;
+            box-shadow: 3px 3px 0 #000;
+        }
+
+        .list-item-title {
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .list-item-desc {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>复古波普设计示例</h1>
+            <p class="subtitle">RETRO POP DESIGN EXAMPLE</p>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">按钮</h2>
+            <div class="card">
+                <button class="btn">默认按钮</button>
+                <button class="btn btn-secondary">次要按钮</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">输入框</h2>
+            <div class="card">
+                <input type="text" class="input" placeholder="输入文本...">
+                <input type="email" class="input" placeholder="输入邮箱...">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">卡片</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3 class="card-title">卡片标题</h3>
+                    <p class="card-content">这是一个示例卡片，展示了复古波普设计的排版和间距。</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">统计数据</h3>
+                    <div class="stat-value">1,234</div>
+                    <p class="stat-label">总访问量</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">色彩系统</h2>
+            <div class="card">
+                <div class="color-swatch" style="background: #ff4757;">
+                    <span class="color-label">#ff4757</span>
+                </div>
+                <div class="color-swatch" style="background: #3742fa;">
+                    <span class="color-label">#3742fa</span>
+                </div>
+                <div class="color-swatch" style="background: #ffa502;">
+                    <span class="color-label">#ffa502</span>
+                </div>
+                <div class="color-swatch" style="background: #ff6b81;">
+                    <span class="color-label">#ff6b81</span>
+                </div>
+                <div class="color-swatch" style="background: #2ed573;">
+                    <span class="color-label">#2ed573</span>
+                </div>
+                <div class="color-swatch" style="background: #a55eea;">
+                    <span class="color-label">#a55eea</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">列表</h2>
+            <div class="card">
+                <div class="list-item">
+                    <div class="list-item-title">项目一</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目二</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-title">项目三</div>
+                    <div class="list-item-desc">这是项目的描述信息</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

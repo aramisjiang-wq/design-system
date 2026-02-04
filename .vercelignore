@@ -1,0 +1,21 @@
+# Documentation and backend tools (not needed for deployment)
+docs/
+style-extractor/
+
+# Shell scripts
+*.sh
+push-to-github.sh
+start-all.sh
+start-extractor.sh
+start-services.sh
+stop-services.sh
+
+# Build and utility scripts
+*.js
+!index.html
+create-missing-folders.js
+fix-preview.js
+improve-examples.js
+optimize-examples.js
+optimize-layout.js
+

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bento Box 设计示例</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+            color: #1e293b;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .btn {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .input {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            color: #1e293b;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .bento-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .bento-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .bento-card.span-2 {
+            grid-column: span 2;
+        }
+
+        .bento-card.span-3 {
+            grid-column: span 3;
+        }
+
+        .bento-card.span-4 {
+            grid-column: span 4;
+        }
+
+        .bento-card.row-2 {
+            grid-row: span 2;
+        }
+
+        .bento-card.row-3 {
+            grid-row: span 3;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: #1e293b;
+        }
+
+        .card-content {
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: #3b82f6;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #1e293b;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bento Box 设计示例</h1>
+            <p class="subtitle">BENTO BOX DESIGN EXAMPLE</p>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">Bento 网格布局</h2>
+            <div class="bento-grid">
+                <div class="bento-card span-2 row-2">
+                    <h3 class="card-title">欢迎回来</h3>
+                    <p class="card-content">这是一个跨2列、跨2行的大卡片，展示了 Bento 布局的灵活性。</p>
+                    <button class="btn" style="margin-top: 1rem;">了解更多</button>
+                </div>
+
+                <div class="bento-card">
+                    <h3 class="card-title">快速访问</h3>
+                    <p class="card-content">快速访问常用功能</p>
+                </div>
+
+                <div class="bento-card">
+                    <h3 class="card-title">最近项目</h3>
+                    <p class="card-content">查看最近的项目</p>
+                </div>
+
+                <div class="bento-card span-2">
+                    <h3 class="card-title">统计数据</h3>
+                    <div style="display: flex; gap: 2rem; margin-top: 1rem;">
+                        <div>
+                            <div class="stat-value">1,234</div>
+                            <div class="stat-label">总访问量</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">567</div>
+                            <div class="stat-label">新用户</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">89</div>
+                            <div class="stat-label">活跃项目</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <h3 class="card-title">日历</h3>
+                    <p class="card-content">查看您的日程</p>
+                </div>
+
+                <div class="bento-card">
+                    <h3 class="card-title">通知</h3>
+                    <p class="card-content">3 条新通知</p>
+                </div>
+
+                <div class="bento-card span-2">
+                    <h3 class="card-title">快速操作</h3>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                        <button class="btn">新建</button>
+                        <button class="btn btn-secondary">编辑</button>
+                        <button class="btn btn-secondary">删除</button>
+                        <button class="btn btn-secondary">导出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

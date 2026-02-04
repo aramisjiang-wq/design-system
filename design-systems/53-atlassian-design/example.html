@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlassian Design System 示例</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            background: #FAFBFC;
+            color: #172B4D;
+            min-height: 100vh;
+            line-height: 1.43;
+        }
+
+        @media (max-height: 300px) {
+            body {
+                min-height: auto !important;
+                padding: 0.5rem !important;
+            }
+            .container {
+                padding: 0.5rem !important;
+                max-width: 100% !important;
+            }
+            header {
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .section {
+                margin-bottom: 1rem !important;
+            }
+            h1 {
+                font-size: 1rem !important;
+            }
+            .section-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .card {
+                padding: 0.5rem !important;
+            }
+            .ak-button {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+            .ak-field-text {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        header {
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #DFE1E6;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #172B4D;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #5E6C84;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #172B4D;
+            margin-bottom: 24px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #DFE1E6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border: 2px solid #DFE1E6;
+            border-radius: 4px;
+            padding: 24px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #172B4D;
+        }
+
+        .card-content {
+            font-size: 14px;
+            color: #5E6C84;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .ak-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .ak-button--appearance-primary {
+            background: #0052CC;
+            color: #FFFFFF;
+        }
+
+        .ak-button--appearance-primary:hover {
+            background: #0065FF;
+        }
+
+        .ak-button--appearance-default {
+            background: #DEEBFF;
+            color: #0052CC;
+        }
+
+        .ak-button--appearance-default:hover {
+            background: #B3D9FF;
+        }
+
+        .ak-button--appearance-subtle {
+            background: transparent;
+            color: #0052CC;
+        }
+
+        .ak-button--appearance-subtle:hover {
+            background: #DEEBFF;
+        }
+
+        .ak-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .ak-field-group {
+            margin-bottom: 16px;
+        }
+
+        .ak-field-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #172B4D;
+            margin-bottom: 8px;
+        }
+
+        .ak-field-text {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-family: inherit;
+            border: 2px solid #DFE1E6;
+            border-radius: 4px;
+            background: #FFFFFF;
+            color: #172B4D;
+            transition: border-color 0.2s;
+        }
+
+        .ak-field-text:focus {
+            outline: none;
+            border-color: #0052CC;
+            box-shadow: 0 0 0 4px rgba(0, 82, 204, 0.1);
+        }
+
+        .ak-field-text:disabled {
+            background: #FAFBFC;
+            opacity: 0.5;
+        }
+
+        .ak-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 4px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .ak-tag--color-blue {
+            background: #DEEBFF;
+            color: #0052CC;
+        }
+
+        .ak-tag--color-green {
+            background: #E3FCEF9;
+            color: #0747A6;
+        }
+
+        .ak-tag--color-red {
+            background: #FFEBE6;
+            color: #BF2600;
+        }
+
+        .ak-tag--rounded {
+            border-radius: 16px;
+        }
+
+        .ak-avatar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #DFE1E6;
+            color: #5E6C84;
+            font-weight: 600;
+            overflow: hidden;
+        }
+
+        .ak-avatar--size-small {
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+        }
+
+        .ak-avatar--size-medium {
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
+        }
+
+        .ak-avatar--size-large {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+
+        .ak-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        .status-badge--success {
+            background: #E3FCEF9;
+            color: #006644;
+        }
+
+        .status-badge--warning {
+            background: #FFFAE6;
+            color: #FF8B00;
+        }
+
+        .status-badge--error {
+            background: #FFEBE6;
+            color: #BF2600;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 2px solid #DFE1E6;
+            border-radius: 4px;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            vertical-align: top;
+        }
+
+        .color-label {
+            font-size: 12px;
+            color: #5E6C84;
+            display: block;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Atlassian Design System</h1>
+            <p class="subtitle">Atlassian 官方设计系统示例</p>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">按钮</h2>
+            <div class="card">
+                <button class="ak-button ak-button--appearance-primary">主要按钮</button>
+                <button class="ak-button ak-button--appearance-default">默认按钮</button>
+                <button class="ak-button ak-button--appearance-subtle">次要按钮</button>
+                <button class="ak-button ak-button--appearance-default" disabled>禁用按钮</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">输入框</h2>
+            <div class="card">
+                <div class="ak-field-group">
+                    <label class="ak-field-label" for="email">邮箱地址</label>
+                    <input type="email" id="email" class="ak-field-text" placeholder="请输入邮箱地址">
+                </div>
+                <div class="ak-field-group">
+                    <label class="ak-field-label" for="password">密码</label>
+                    <input type="password" id="password" class="ak-field-text" placeholder="请输入密码">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">标签</h2>
+            <div class="card">
+                <span class="ak-tag ak-tag--color-blue">设计系统</span>
+                <span class="ak-tag ak-tag--color-green">组件库</span>
+                <span class="ak-tag ak-tag--color-red">重要</span>
+                <span class="ak-tag ak-tag--color-blue ak-tag--rounded">圆角标签</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">头像</h2>
+            <div class="card">
+                <span class="ak-avatar ak-avatar--size-small">A</span>
+                <span class="ak-avatar ak-avatar--size-medium">B</span>
+                <span class="ak-avatar ak-avatar--size-large">C</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">状态徽章</h2>
+            <div class="card">
+                <span class="status-badge status-badge--success">成功</span>
+                <span class="status-badge status-badge--warning">警告</span>
+                <span class="status-badge status-badge--error">错误</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">色彩系统</h2>
+            <div class="card">
+                <div class="color-swatch" style="background: #0052CC;">
+                    <span class="color-label">#0052CC</span>
+                </div>
+                <div class="color-swatch" style="background: #36B37E;">
+                    <span class="color-label">#36B37E</span>
+                </div>
+                <div class="color-swatch" style="background: #FFAB00;">
+                    <span class="color-label">#FFAB00</span>
+                </div>
+                <div class="color-swatch" style="background: #FF5630;">
+                    <span class="color-label">#FF5630</span>
+                </div>
+                <div class="color-swatch" style="background: #172B4D;">
+                    <span class="color-label">#172B4D</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -43,7 +43,6 @@ start index.html
 项目已配置为静态站点：
 - buildCommand: 无需构建
 - outputDirectory: 当前目录
-- framework: static
 
 ## License
 

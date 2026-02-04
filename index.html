@@ -766,14 +766,11 @@
             body.setAttribute('data-theme', newTheme);
             
             const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
             
             if (newTheme === 'dark') {
                 themeIcon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 0 0 9-9 9 9 0 0 0-9-9 9 9 0 0 0-9 9c3.31 0 6-2.69 6-6s-2.69-6-6-6 6-2.69 6-6-2.69 6-6 6 6-2.69 6-6z"/>';
-                themeText.textContent = '亮白';
             } else {
                 themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-                themeText.textContent = '暗黑';
             }
 
             localStorage.setItem('theme', newTheme);
@@ -784,14 +781,11 @@
             document.body.setAttribute('data-theme', savedTheme);
             
             const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
             
             if (savedTheme === 'dark') {
                 themeIcon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 0 0 9-9 9 9 0 0 0-9-9 9 9 0 0 0-9 9c3.31 0 6-2.69 6-6s-2.69-6-6-6 6-2.69 6-6-2.69 6-6 6 6-2.69 6-6z"/>';
-                themeText.textContent = '亮白';
             } else {
                 themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-                themeText.textContent = '暗黑';
             }
         }
 
